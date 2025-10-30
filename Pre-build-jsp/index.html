@@ -4,26 +4,25 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title>Simple Thing</title>
+		<title>Login</title>
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<main class="container">
-			<h1>Simple Thing</h1>
-			<p class="lead">This is a tiny example page with a theme toggle and a small interactive toast.</p>
-
-			<div class="controls">
-				<button id="toggleTheme">Toggle Dark Mode</button>
-				<button id="sayHello">Say Hello</button>
+		<header>
+			<div class="logo-wrap" aria-hidden="false">
+				<img class="logo" src="FPTU Logo.png" alt="FPTU logo" />
 			</div>
+			<nav class="navigation">
+                <a href="#">Home</a>
+                <a href="#">Request</a>
+                <a href="#">View</a>
+                <a href="#">Agenda</a>
+                <a href="#">Settings</a>
+                <button class="btnLogin-popup">Log out</button>
+            </nav>
+        </header>
+            
 
-			<section class="info">
-				<h2>About</h2>
-				<p>Use the buttons above to interact. The theme preference is stored in localStorage.</p>
-			</section>
-		</main>
-
-		<div id="toast" class="toast" aria-live="polite"></div>
 
 		<script src="script.js"></script>
 	</body>
