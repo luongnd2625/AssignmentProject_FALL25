@@ -17,22 +17,22 @@
             <div class="input-box">
                 <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
                 <input type="username" required />
-                <label for="">Username</label>
+                <label for="">Tên đăng nhập</label>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
                 <input type="password" required />
-                <label for="">Password</label>
+                <label for="">Mật khẩu</label>
 
             </div>
             <div class="remember-forgot">
-                <label><input type="checkbox" />Remember me</label>
-                <a href="#">Forgot Password?</a>
+                <label><input type="checkbox" />Lưu đăng nhập</label>
+                <a href="#">Quên mật khẩu?</a>
             </div>
-            <button type="submit" class="btnLogin">Login</button>
+            <button type="submit" class="btnLogin">Đăng nhập</button>
             <div class="login-register">
-                <p>Don't have an account? 
-                    <a href="#" class="register-link">Register</a>
+                <p>Chưa có tài khoản 
+                    <a href="#" class="register-link">Đăng kí</a>
                 </p>
             </div>
         </form>
@@ -44,17 +44,17 @@
             <div class="input-box">
                 <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
                 <input type="username" required />
-                <label for="">Username</label>
+                <label for="">Tên đăng nhập</label>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
                 <input type="password" required />
-                <label for="">Password</label>
+                <label for="">Mật khẩu</label>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="person-add"></ion-icon></span>
                 <input type="fullname" required />
-                <label for="">Fullname</label>
+                <label for="">Họ và tên</label>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="mail"></ion-icon></span>
@@ -64,12 +64,12 @@
             <div class="input-box">
                 <span class="icon"><ion-icon name="call"></ion-icon></span>
                 <input type="phone" required />
-                <label for="">Phone number</label>
+                <label for="">Số điện thoại</label>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="briefcase"></ion-icon></span>
                 <select name="department" id="department" required>
-                    <option value="" disabled selected>Select Department</option>
+                    <option value="" disabled selected>Chọn phòng ban</option>
                     <option value="IT">1. IT</option>
                     <option value="QA">2. QA</option>
                     <option value="Sale">3. Sale</option>
@@ -78,20 +78,21 @@
             <div class="input-box">
                 <span class="icon"><ion-icon name="people"></ion-icon></span>
                 <select name="role" id="role" required>
-                    <option value="" disabled selected>Select Role</option>
+                    <option value="" disabled selected>Chọn quyền hạn</option>
+                    <option value="Admin">0. Admin</option>
                     <option value="Department Manager">1. Department Manager</option>
                     <option value="Group Leader">2. Group Leader</option>
                     <option value="Employee">3. Employee</option>
                 </select>
             </div>
             <div class="remember-forgot">
-                <label><input type="checkbox" />I agree to the term & conditions</label>
+                <label><input type="checkbox" />Đồng ý với điều khoản sử dụng</label>
                 
             </div>
-            <button type="submit" class="btnRegister">Register</button>
+            <button type="submit" class="btnRegister">Đăng kí</button>
             <div class="login-register">
-                <p>Already have an account? 
-                    <a href="#" class="login-link">Login</a>
+                <p>Bạn đã có tài khoản ?
+                    <a href="#" class="login-link">Đăng nhập</a>
                 </p>
             </div>
         
@@ -117,7 +118,7 @@
 </html>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
     --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
