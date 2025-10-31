@@ -1,0 +1,112 @@
+/* Import Poppins from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root{
+    --sidebar-width: 220px;
+}
+
+body {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    padding-left: var(--sidebar-width);
+}
+
+header {
+    background: url(Bg.png) no-repeat;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    padding: 28px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    z-index: 99;
+}
+
+
+
+/* Logo image sizing */
+.logo {
+    height:64px; /* actual visible logo height */
+    width:auto;
+    display:block;
+    object-fit:contain;
+}
+.logo-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center; /* center the logo horizontally in the sidebar */
+    width:100%;
+    overflow:visible;
+}
+.logo-wrap img{
+    /* keep the logo element size but visually scale the image larger
+       so the wrapper (.logo or .logo-wrap) dimensions don't change */
+    transform: scale(2.4);
+    transform-origin: center center;
+    height:64px;
+    width:auto;
+    display:block;
+    will-change: transform;
+}
+
+.navigation{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:8px;
+    flex: 1 1 auto; /* let nav grow so logout can be pushed to bottom */
+    align-items: stretch;
+}
+
+.navigation a{
+    position: relative;
+    font-size: 1.05em;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 12px;
+    transition: background .18s ease, transform .12s ease, box-shadow .18s ease;
+}
+
+.navigation a:hover{
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transform: translateX(4px);
+}
+
+.navigation .btnLogin-popup{
+    width: 100%;
+    height: 46px;
+    background-color: transparent;
+    border: 2px solid #fff;
+    outline: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.05em;
+    color: #fff;
+    font-weight: 600;
+    margin-top: auto; /* push to bottom */
+    transition: background .18s ease, color .18s ease;
+}
+
+.navigation a::after{ display:none; }
+.navigation .btnLogin-popup:hover{ background-color:#fff; color:#162928; }
