@@ -4,8 +4,8 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Đăng nhập</title>
-        <link rel="stylesheet" href="Login.css" />
+        <title>Đăng kí</title>
+        <link rel="stylesheet" href="Register.css" />
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap&subset=vietnamese');
             body {
@@ -22,7 +22,7 @@
             .wrapper {
                 position: relative;
                 width: 400px;
-                height: 440px;
+                height: 820px;
                 background: transparent;
                 border: 2px solid rgba(255, 255, 255, 0.5);
                 border-radius: 20px;
@@ -31,18 +31,11 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                overflow: hidden;
-                transition: 0.5s ease;
             }
-
-            .wrapper .form-box.login {
-                width: 100%;
+            .wrapper .form-box.register {
+                width: 80%;
                 padding: 40px;
             }
-
-
-
-
             .form-box h2 {
                 font-size: 2em;
                 color: #162938;
@@ -129,17 +122,8 @@
                 margin-right: 3px;
             }
 
-            .remember-forgot a {
-                color: #162938;
-                text-decoration: none;
-            }
 
-            .remember-forgot a:hover {
-                text-decoration: underline;
-
-            }
-
-            .btnLogin {
+            .btnRegister {
                 width: 100%;
                 height: 45px;
                 background: #162938;
@@ -157,8 +141,8 @@
 
     <body>
         <div class="wrapper">
-            <div class="form-box login"> 
-                <h2>Đăng nhập</h2>
+            <div class="form-box register"> 
+                <h2>Đăng kí</h2>
                 <form action="#">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
@@ -168,17 +152,46 @@
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
                         <input type="password" required />
-                        <label for="">Mật khẩu</label>
-
+                        <label for="">Password</label>
                     </div>
-                    <div class="remember-forgot">
-                        <label><input type="checkbox" />Nhớ mật khẩu</label>
-                        <a href="#">Quên mật khẩu?</a>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="person-add"></ion-icon></span>
+                        <input type="fullname" required />
+                        <label for="">Họ và tên</label>
                     </div>
-                    <button type="submit" class="btnLogin">Đăng nhập</button>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                        <input type="email" required />
+                        <label for="">Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="call"></ion-icon></span>
+                        <input type="phone" required />
+                        <label for="">Số điện thoại</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="briefcase"></ion-icon></span>
+                        <select name="department" id="department" required>
+                            <option value="" disabled selected>Chọn phòng ban</option>
+                            <option value="IT">1. IT</option>
+                            <option value="QA">2. QA</option>
+                            <option value="Sale">3. Sale</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="people"></ion-icon></span>
+                        <select name="role" id="role" required>
+                            <option value="" disabled selected>Chọn Role</option>
+                            <option value="Department Manager">0. Admin</option>
+                            <option value="Department Manager">1. Department Manager</option>
+                            <option value="Group Leader">2. Group Leader</option>
+                            <option value="Employee">3. Employee</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btnRegister">Đăng ký</button>
                     <div class="login-register">
-                        <p>Chưa có tài khoản 
-                            <a href="#" class="register-link">Đăng ký</a>
+                        <p>Đã có tài khoản
+                            <a href="#" class="login-link">Đăng nhập</a>
                         </p>
                     </div>
                 </form>
