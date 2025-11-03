@@ -10,10 +10,10 @@ public class Request {
     private Date toDate;
     private String reason;
     private int statusID;
-    private Integer appriverID;
+    private Integer approverID;
     private String approverNote;
 
-    public Request(int reqID, String title, int userID, Date fromDate, Date toDate, String reason, int statusID, Integer appriverID, String approverNote) {
+    public Request(int reqID, String title, int userID, Date fromDate, Date toDate, String reason, int statusID, Integer approverID, String approverNote) {
         this.reqID = reqID;
         this.title = title;
         this.userID = userID;
@@ -21,7 +21,7 @@ public class Request {
         this.toDate = toDate;
         this.reason = reason;
         this.statusID = statusID;
-        this.appriverID = appriverID;
+        this.approverID = approverID;
         this.approverNote = approverNote;
     }
 
@@ -82,11 +82,11 @@ public class Request {
     }
 
     public Integer getAppriverID() {
-        return appriverID;
+        return approverID;
     }
 
     public void setAppriverID(Integer appriverID) {
-        this.appriverID = appriverID;
+        this.approverID = appriverID;
     }
 
     public String getApproverNote() {
@@ -99,7 +99,7 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" + "reqID=" + reqID + ", title=" + title + ", userID=" + userID + ", fromDate=" + fromDate + ", toDate=" + toDate + ", reason=" + reason + ", statusID=" + statusID + ", appriverID=" + appriverID + ", approverNote=" + approverNote + '}';
+        return "Request{" + "reqID=" + reqID + ", title=" + title + ", userID=" + userID + ", fromDate=" + fromDate + ", toDate=" + toDate + ", reason=" + reason + ", statusID=" + statusID + ", approverID=" + approverID + ", approverNote=" + approverNote + '}';
     }
     
     
