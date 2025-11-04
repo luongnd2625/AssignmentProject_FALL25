@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Đăng nhập</title>
+        <title>Login</title>
         <link rel="stylesheet" href="Login.css" />
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap&subset=vietnamese');
@@ -115,7 +115,7 @@
                 pointer-events: none;
             }
 
-            .remember-forgot {
+            .remember {
                 font-size: 0.9em;
                 color: #162938 ;
                 font-weight: 500;
@@ -124,17 +124,17 @@
                 justify-content: space-between;
             }
 
-            .remember-forgot label input {
+            .remember label input {
                 accent-color: #162938;
                 margin-right: 3px;
             }
 
-            .remember-forgot a {
+            .remember a {
                 color: #162938;
                 text-decoration: none;
             }
 
-            .remember-forgot a:hover {
+            .remember a:hover {
                 text-decoration: underline;
 
             }
@@ -158,27 +158,26 @@
     <body>
         <div class="wrapper">
             <div class="form-box login"> 
-                <h2>Đăng nhập</h2>
+                <h2>Login</h2>
                 <form action="#">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
-                        <input type="username" required />
-                        <label for="">Username</label>
+                        <input type="username" id="username" name="username"  required />
+                        <label for="username">Username</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" required />
-                        <label for="">Mật khẩu</label>
+                        <input type="password" id="password" name="password" required />
+                        <label for="password">Password</label>
 
                     </div>
-                    <div class="remember-forgot">
-                        <label><input type="checkbox" />Nhớ mật khẩu</label>
-                        <a href="#">Quên mật khẩu?</a>
+                    <div class="remember">
+                        <label><input type="checkbox" name="remember" />Remember Password</label>
                     </div>
-                    <button type="submit" class="btnLogin">Đăng nhập</button>
+                    <button type="submit" class="btnLogin">Login</button>
                     <div class="login-register">
-                        <p>Chưa có tài khoản 
-                            <a href="#" class="register-link">Đăng ký</a>
+                        <p>Don't have an account ?
+                            <a href="#" class="register-link">Register</a>
                         </p>
                     </div>
                 </form>

@@ -152,7 +152,7 @@
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
                         <input type="password" required />
-                        <label for="">Password</label>
+                        <label for="">Mật khẩu</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-add"></ion-icon></span>
@@ -190,7 +190,7 @@
                     </div>
                     <button type="submit" class="btnRegister">Đăng ký</button>
                     <div class="login-register">
-                        <p>Đã có tài khoản
+                        <p>Đã có tài khoản ?
                             <a href="#" class="login-link">Đăng nhập</a>
                         </p>
                     </div>
