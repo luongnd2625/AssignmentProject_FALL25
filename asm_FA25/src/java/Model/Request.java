@@ -81,12 +81,12 @@ public class Request {
         this.statusID = statusID;
     }
 
-    public Integer getAppriverID() {
+    public Integer getApproverID() {
         return approverID;
     }
 
-    public void setAppriverID(Integer appriverID) {
-        this.approverID = appriverID;
+    public void setApproverID(Integer approverID) {
+        this.approverID = approverID;
     }
 
     public String getApproverNote() {
