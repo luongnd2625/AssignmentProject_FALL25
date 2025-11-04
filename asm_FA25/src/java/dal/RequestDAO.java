@@ -94,7 +94,7 @@ public class RequestDAO extends DBcontext{
             ex.printStackTrace();
         }
     }
-    //Update request(Change request to <Approved> or <Reject> if approver want) 
+    //Update request if user need
     public void updateRequest(Request request) {
         String query = "UPDATE Request SET title = ?, fromDate = ?, toDate = ?, reason = ?, approverID = ?, approverNote = ?";
         try {
@@ -110,7 +110,7 @@ public class RequestDAO extends DBcontext{
             e.printStackTrace();
         }
     }
-    //Approve Or Reject Request
+    //Approve Or Reject Request(for approver)
     public void approveRequest(Request request) {
         String query = "UPDATE Request SET statusID = ?, approverID = ?, approverNote = ? WHERE approverID = ?";
         try {
@@ -135,5 +135,4 @@ public class RequestDAO extends DBcontext{
         }
     }
     //Filter of request
-    
 }
