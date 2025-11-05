@@ -8,6 +8,6 @@ package Controller;
  *
  * @author Ber
  */
-public class Admin_Agenda {
+public class Admin_UserManagermentServlet {
     
 }

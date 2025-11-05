@@ -8,6 +8,6 @@ package Controller;
  *
  * @author Ber
  */
-public class User_Settings {
+public class Admin_RequestManagermentServlet {
     
 }

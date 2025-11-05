@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
             cr.setMaxAge(604800);
         } else {
             cu.setMaxAge(0);
-            cp.setMaxAge(0);            //Don't add cookie for login
+            cp.setMaxAge(0);            
             cr.setMaxAge(0);
         }
         
