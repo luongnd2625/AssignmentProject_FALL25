@@ -47,15 +47,15 @@ public class LoginServlet extends HttpServlet {
         try {
             Users n = d.getUsersByUsernameAndPassword(user, pass);
             if(n ==  null) {
-                req.setAttribute("es", "Wrong username or password, try again !!!");
-                req.getRequestDispatcher("login.jsp").forward(req, resp);
+                req.setAttribute("error", "Wrong username or password, try again !!!");
+                req.getRequestDispatcher("Login.jsp").forward(req, resp);
             } else {
                 session.setAttribute("user", n);
                 
                 if (n.getRoleID() == 0) {
-                    
+                    resp.sendRedirect("adminUserManagement");
                 } else {
-                    
+                    resp.sendRedirect("userRequest");
                 }
             }
         } catch (Exception e) {
