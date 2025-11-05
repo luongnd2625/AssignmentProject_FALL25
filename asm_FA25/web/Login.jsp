@@ -125,20 +125,7 @@
                 justify-content: space-between;
             }
 
-            .remember label input {
-                accent-color: #162938;
-                margin-right: 3px;
-            }
-
-            .remember a {
-                color: #162938;
-                text-decoration: none;
-            }
-
-            .remember a:hover {
-                text-decoration: underline;
-
-            }
+            
 
             .btnLogin {
                 width: 100%;
@@ -160,7 +147,7 @@
         <div class="wrapper">
             <div class="form-box login"> 
                 <h2>Login</h2>
-                <form action="#">
+                <form action="login" method="POST">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
                         <input type="username" id="username" name="username" value="${cookie.cuser.value}" placeholder="Username" required />
@@ -172,11 +159,7 @@
                         <label for="password">Mật khẩu</label>
 
                     </div>
-                    <div class="remember">
-                        <label><input type="checkbox"
-                                      ${cookie.crem!=null?'checked':''}
-                                      name="remember" value"ON"/>Nhớ mật khẩu</label>
-                    </div>
+                    
                         <button type="submit" class="btnLogin" value="Login">Đăng nhập</button>
                     <div class="login-register">
                         <p>Chưa có tài khoản ?
