@@ -8,6 +8,6 @@ package Controller;
  *
  * @author Ber
  */
-public class User_RequestManagermentServlet {
+public class UserRequestViewServlet {
     
 }
