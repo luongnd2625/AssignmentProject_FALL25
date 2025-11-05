@@ -77,14 +77,14 @@ public class RequestDAO extends DBcontext{
             if (request.getApproverID() != null) {
                 st.setInt(7, request.getApproverID());
 
-                // Nếu có người duyệt, có thể có ghi chú
+                // If this request is be approved, they can have note
                 if (request.getApproverNote() != null && !request.getApproverNote().trim().isEmpty()) {
                     st.setString(8, request.getApproverNote());
                 } else {
                     st.setNull(8, java.sql.Types.NVARCHAR);
                 }
             } else {
-                // Nếu chưa có người duyệt, cả hai trường phải NULL
+                // If no one approve/reject this request, their type must be null
                 st.setNull(7, java.sql.Types.INTEGER);
                 st.setNull(8, java.sql.Types.NVARCHAR);
             }
@@ -96,12 +96,12 @@ public class RequestDAO extends DBcontext{
     }
     //Update request if user need
     public void updateRequest(Request request) {
-        String query = "UPDATE Request SET title = ?, fromDate = ?, toDate = ?, reason = ?, approverID = ?, approverNote = ?";
+        String query = "UPDATE Request SET title = ?, fromDate = ?, toDate = ?, reason = ? WHERE reqID = ?";
         try {
             PreparedStatement st = connection.prepareStatement(query);
             st.setString(1, request.getTitle());
-            st.setDate(2, (java.sql.Date) request.getFromDate());
-            st.setDate(3, (java.sql.Date) request.getToDate());
+            st.setDate(2, new java.sql.Date(request.getFromDate().getTime()));
+            st.setDate(3, new java.sql.Date(request.getToDate().getTime()));
             st.setString(4, request.getReason());
             st.setInt(5, request.getApproverID());
             st.setString(6, request.getApproverNote());
@@ -112,12 +112,13 @@ public class RequestDAO extends DBcontext{
     }
     //Approve Or Reject Request(for approver)
     public void approveRequest(Request request) {
-        String query = "UPDATE Request SET statusID = ?, approverID = ?, approverNote = ? WHERE approverID = ?";
+        String query = "UPDATE Request SET statusID = ?, approverID = ?, approverNote = ? WHERE reqID = ?";
         try {
             PreparedStatement st = connection.prepareStatement(query);
             st.setInt(1, request.getStatusID());
             st.setInt(2, request.getApproverID());
             st.setString(3, request.getApproverNote());
+            st.setInt(4, request.getReqID());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,3 +137,4 @@ public class RequestDAO extends DBcontext{
     }
     //Filter of request
 }
+

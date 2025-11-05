@@ -50,7 +50,8 @@ public class UsersDAO extends DBcontext{
                 String phone = rs.getString("phone");
                 int deptID = rs.getInt("deptID");
                 int roleID = rs.getInt("roleID");
-                Users users = new Users(userID, username, password, fullname, email, phone, deptID, roleID);
+                Users user = new Users(userID, username, password, fullname, email, phone, deptID, roleID);
+                list.add(user);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -74,7 +75,8 @@ public class UsersDAO extends DBcontext{
                 String phone = rs.getString("phone");
                 int deptID = rs.getInt("deptID");
                 int roleID = rs.getInt("roleID");
-                Users users = new Users(userID, username, password, fullname, email, phone, deptID, roleID);
+                Users user = new Users(userID, username, password, fullname, email, phone, deptID, roleID);
+                list.add(user);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
