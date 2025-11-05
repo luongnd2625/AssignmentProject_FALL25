@@ -1,5 +1,6 @@
 <!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="vi">
     <head>
         <meta charset="UTF-8" />
@@ -162,27 +163,33 @@
                 <form action="#">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
-                        <input type="username" id="username" name="username"  required />
+                        <input type="username" id="username" name="username" value="${cookie.cuser.value}" placeholder="Username" required />
                         <label for="username">Username</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" id="password" name="password" required />
+                        <input type="password" id="password" name="password" value ="${cookie.cpass.value}" placeholder="Password" required />
                         <label for="password">Mật khẩu</label>
 
                     </div>
                     <div class="remember">
-                        <label><input type="checkbox" name="remember" />Nhớ mật khẩu</label>
+                        <label><input type="checkbox"
+                                      ${cookie.crem!=null?'checked':''}
+                                      name="remember" value"ON"/>Nhớ mật khẩu</label>
                     </div>
-                    <button type="submit" class="btnLogin">Đăng nhập</button>
+                        <button type="submit" class="btnLogin" value="Login">Đăng nhập</button>
                     <div class="login-register">
                         <p>Chưa có tài khoản ?
-                            <a href="#" class="register-link">Đăng kí</a>
+                            <a href="register" class="register-link">Đăng kí</a>
                         </p>
                     </div>
                 </form>
             </div>
-
+                                      
+        <c:if test="${not empty error}">
+        <center><h2 style="color: red">${error}</h2></center>
+        </c:if>
+        
         </div>
         <script src="script.js" defer></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

@@ -124,18 +124,64 @@
                 background-color:#fff;
                 color:#162928;
             }
+            .content {
+                margin-left: 270px;
+                padding: 20px;
+                width: 100%;
+            }
 
         </style>
     </head>
     <body>
         <header>
             <nav class="navigation">
-                <a href="#">Quản lý nhân sự</a>
-                <a href="#">Quản lí đơn</a>
-                <a href="#">Theo dõi nghỉ phép</a>
-                <a href="#">Cài đặt</a>                
-                <button class="btnLogin-popup">Đăng xuất</button>
+                <a href="adminUserManagement">Quản lý nhân sự</a>
+                <a href="adminRequestManagement">Quản lí đơn</a>
+                <a href="adminAgenda">Theo dõi nghỉ phép</a>
+                <a href="userSettings">Cài đặt</a>                
+                <button class="btnLogin-popup">
+                    <a href="logout" class="logout-btn">Đăng xuất</a>
+                </button>
             </nav>
         </header>
     </body>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#userTable').DataTable();
+            });
+            // Hàm xử lý xóa người dùng với SweetAlert
+            $(document).ready(function () {
+                $(document).on('click', '.del', function () {
+                    let userId = $(this).val(); // Lấy userId từ button
+                    console.log("User ID cần xóa:", userId); // Kiểm tra xem có lấy đúng userId không
+
+                    if (!userId) {
+                        alert("Lỗi: Không lấy được userId.");
+                        return;
+                    }
+
+                    swal({
+                        title: "Cảnh báo!",
+                        text: "Bạn có chắc chắn muốn xóa người dùng này?",
+                        icon: "warning",
+                        buttons: ["Hủy bỏ", "Đồng ý"],
+                        dangerMode: true,
+                    }).then((confirmDelete) => {
+                        if (confirmDelete) {
+                            swal("Đã xóa thành công!", {
+                                icon: "success",
+                                timer: 1500,
+                                buttons: false
+                            }).then(() => {
+                                window.location.href = "adminUserManagement?action=delete&userId=" + userId;
+                            });
+                        }
+                    });
+                });
+            });
+
+        </script>
 </html>
