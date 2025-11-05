@@ -168,16 +168,16 @@
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
                         <input type="password" id="password" name="password" required />
-                        <label for="password">Password</label>
+                        <label for="password">Mật khẩu</label>
 
                     </div>
                     <div class="remember">
-                        <label><input type="checkbox" name="remember" />Remember Password</label>
+                        <label><input type="checkbox" name="remember" />Nhớ mật khẩu</label>
                     </div>
-                    <button type="submit" class="btnLogin">Login</button>
+                    <button type="submit" class="btnLogin">Đăng nhập</button>
                     <div class="login-register">
-                        <p>Don't have an account ?
-                            <a href="#" class="register-link">Register</a>
+                        <p>Chưa có tài khoản ?
+                            <a href="#" class="register-link">Đăng kí</a>
                         </p>
                     </div>
                 </form>
