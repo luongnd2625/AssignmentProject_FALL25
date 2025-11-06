@@ -42,16 +42,27 @@ public class AdminUserManagementServlet extends HttpServlet {
         System.out.println("ACTION: " + action);
 
         if (action.equalsIgnoreCase("addSave")) {
+            String usernameStr = request.getParameter("username");
+            String password = request.getParameter("password");
+            String fullname = request.getParameter("fullname");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            int deptID = Integer.parseInt(request.getParameter("deptID"));
+            int roleID = Integer.parseInt(request.getParameter("roleID"));
+            
+            Users userAdd = new Users(0, usernameStr, password, fullname, email, phone, deptID, roleID);
+            udao.addUser(userAdd);
+            
         } else if (action.equalsIgnoreCase("edit")) {
             int userID = Integer.parseInt(request.getParameter("userID"));
             String usernameStr = request.getParameter("username");
             String password = request.getParameter("password");
-            String fullname = request.getParameter("fullname"); 
+            String fullname = request.getParameter("fullname");
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
-            int deptId = Integer.parseInt(request.getParameter("deptId"));
-            int roleId = Integer.parseInt(request.getParameter("roleId"));
-            Users userEdit = new Users(userID, usernameStr, password, fullname, email, phone, deptId, roleId);
+            int deptID = Integer.parseInt(request.getParameter("deptID"));
+            int roleID = Integer.parseInt(request.getParameter("roleID"));
+            Users userEdit = new Users(userID, usernameStr, password, fullname, email, phone, deptID, roleID);
             System.out.println("User Edit: "+userEdit.toString());
             udao.editUser(userEdit);
         } 
@@ -62,8 +73,13 @@ public class AdminUserManagementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
         UsersDAO udao = new UsersDAO();
+        if (action != null && action.equalsIgnoreCase("delete")) {
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            udao.deleteUsers(userId);
+            response.sendRedirect("adminUserManagement");
+            return;
+        }
         DepartmentDAO ddao = new DepartmentDAO();
         RoleDAO rdao = new RoleDAO();
 
@@ -71,24 +87,6 @@ public class AdminUserManagementServlet extends HttpServlet {
         List<Department> dlist = ddao.getAll();
         List<Role> rlist = rdao.getAll();
 
-        if (action != null && action.equalsIgnoreCase("add")) {
-            request.setAttribute("dlist", dlist);
-            request.setAttribute("rlist", rlist);
-            System.out.println("ACTION: " + action);
-            for (Role r : rlist) {
-                System.out.println("ROLE LIST: " + r);
-            }
-            for (Department d : dlist) {
-                System.out.println("DEPARTMENT LIST: " + d);
-            }
-            request.getRequestDispatcher("Admin_UserAdd.jsp").forward(request, response);
-            return;
-        } else if (action != null && action.equalsIgnoreCase("delete")) {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            udao.deleteUsers(userId);
-            response.sendRedirect("adminUserManagement");
-            return;
-        }
         request.setAttribute("ulist", ulist);
         request.setAttribute("dlist", dlist);
         request.setAttribute("rlist", rlist);
