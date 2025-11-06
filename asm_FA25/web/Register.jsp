@@ -1,5 +1,6 @@
 <!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="vi">
     <head>
         <meta charset="UTF-8" />
@@ -143,51 +144,54 @@
         <div class="wrapper">
             <div class="form-box register"> 
                 <h2>Đăng kí</h2>
-                <form action="#">
+                <form action="register" method="POST">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
-                        <input type="username" required />
+                        <input type="username" name="username" required />
                         <label for="">Username</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" required />
+                        <input type="password" name="password" required />
                         <label for="">Mật khẩu</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-add"></ion-icon></span>
-                        <input type="fullname" required />
+                        <input type="fullname" name="fullname" required />
                         <label for="">Họ và tên</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                        <input type="email" required />
+                        <input type="email" name="email" required />
                         <label for="">Email</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="call"></ion-icon></span>
-                        <input type="phone" required />
+                        <input type="phone" name="phone" required />
                         <label for="">Số điện thoại</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="briefcase"></ion-icon></span>
-                        <select name="department" id="department" required>
+                        <select name="deptID" id="department" required>
                             <option value="" disabled selected>Chọn phòng ban</option>
-                            <option value="IT">1. IT</option>
-                            <option value="QA">2. QA</option>
-                            <option value="Sale">3. Sale</option>
+                            <option value="1">1. IT</option>
+                            <option value="2">2. QA</option>
+                            <option value="3">3. Sale</option>
                         </select>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="people"></ion-icon></span>
-                        <select name="role" id="role" required>
+                        <select name="roleID" id="role" required>
                             <option value="" disabled selected>Chọn Role</option>
-                            <option value="Department Manager">0. Admin</option>
-                            <option value="Department Manager">1. Department Manager</option>
-                            <option value="Group Leader">2. Group Leader</option>
-                            <option value="Employee">3. Employee</option>
+                            <option value="0">0. Admin</option>
+                            <option value="1">1. Department Manager</option>
+                            <option value="2">2. Group Leader</option>
+                            <option value="3">3. Employee</option>
                         </select>
                     </div>
+                    <c:if test="${not empty error}">
+                        <p style="color: red; text-align: center; margin-bottom: 10px;">${error}</p>
+                    </c:if>
                     <button type="submit" class="btnRegister">Đăng ký</button>
                     <div class="login-register">
                         <p>Đã có tài khoản ?
