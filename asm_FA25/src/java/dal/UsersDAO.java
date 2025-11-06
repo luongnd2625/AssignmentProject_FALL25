@@ -213,6 +213,47 @@ public class UsersDAO extends DBcontext{
             ex.printStackTrace();
         }
     }
+    /**
+     * Lấy UserID của người duyệt đơn TỰ ĐỘNG dựa trên quy tắc nghiệp vụ.
+     * @param userDeptID Phòng ban của người gửi
+     * @param userRoleID Vai trò của người gửi
+     * @return UserID của người duyệt, hoặc null nếu không tìm thấy.
+     */
+    public Integer getAutomaticApproverID(int userDeptID, int userRoleID) {
+        String sql = "";
+        Integer approverRole = null;
+
+        if (userRoleID == 3 || userRoleID == 2) {
+            // Role 3 (Employee) & Role 2 (Leader) -> Gửi cho Role 1 (Manager) CÙNG PHÒNG BAN
+            approverRole = 1;
+            sql = "SELECT TOP 1 userID FROM Users WHERE deptID = ? AND roleID = ?";
+        } else if (userRoleID == 1) {
+            // Role 1 (Manager) -> Gửi cho Role 0 (Admin)
+            approverRole = 0;
+            sql = "SELECT TOP 1 userID FROM Users WHERE roleID = 0";
+        } else {
+            // Role 0 (Admin) không gửi đơn
+            return null;
+        }
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            
+            if (approverRole == 1) { // Chỉ set deptID nếu tìm Manager (Role 1)
+                st.setInt(1, userDeptID);
+            }
+            
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Trả về userID của người duyệt
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        // Trả về null nếu không tìm thấy
+        return null; 
+    }
     
     
 }
