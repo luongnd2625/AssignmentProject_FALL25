@@ -129,12 +129,6 @@
                 background-color: #343a40;
                 color: #ffffff;
             }
-
-
-            .password-cell {
-                -webkit-text-security: disc;
-                text-security: disc;
-            }
         </style>
     </head>
 
