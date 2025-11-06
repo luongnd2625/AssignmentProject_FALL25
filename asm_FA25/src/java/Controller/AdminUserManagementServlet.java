@@ -42,26 +42,16 @@ public class AdminUserManagementServlet extends HttpServlet {
         System.out.println("ACTION: " + action);
 
         if (action.equalsIgnoreCase("addSave")) {
-            String usernameStr = request.getParameter("username");
-            String password = request.getParameter("password");
-            String fullname = request.getParameter("fullname");
-            String email = request.getParameter("email");
-            String phone = request.getParameter("phone");
-            int deptID = Integer.parseInt(request.getParameter("deptID"));
-            int roleID = Integer.parseInt(request.getParameter("roleID"));
-            
-            Users userAdd = new Users(roleID, usernameStr, password, fullname, email, phone, deptID, roleID);
-            udao.addUser(userAdd);
         } else if (action.equalsIgnoreCase("edit")) {
             int userID = Integer.parseInt(request.getParameter("userID"));
             String usernameStr = request.getParameter("username");
             String password = request.getParameter("password");
-            String name = request.getParameter("name");
+            String fullname = request.getParameter("fullname"); 
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
             int deptId = Integer.parseInt(request.getParameter("deptId"));
             int roleId = Integer.parseInt(request.getParameter("roleId"));
-            Users userEdit = new Users(userID, usernameStr, password, name, email, phone, deptId, roleId);
+            Users userEdit = new Users(userID, usernameStr, password, fullname, email, phone, deptId, roleId);
             System.out.println("User Edit: "+userEdit.toString());
             udao.editUser(userEdit);
         } 
