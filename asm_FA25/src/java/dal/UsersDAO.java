@@ -33,7 +33,33 @@ public class UsersDAO extends DBcontext{
         }
         return account;
     }
+    //Check email
+    public boolean isEmailTaken(String email) {
+        String query = "SELECT * FROM Users WHERE email = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setString(1, email);
+            ResultSet rs = st.executeQuery();
+            return rs.next(); //If found email, true
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
     
+    //Check phone for register
+    public boolean isPhoneTaken(String phone) {
+        String query = "SELECT * FROM Users WHERE phone = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setString(1, phone);
+            ResultSet rs = st.executeQuery();
+            return rs.next(); //If found phone, true
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
     //Get all users
     public List<Users> getAll() {
         List<Users> list = new ArrayList<>();
