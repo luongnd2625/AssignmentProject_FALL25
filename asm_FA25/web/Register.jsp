@@ -195,7 +195,7 @@
                     <button type="submit" class="btnRegister">Đăng ký</button>
                     <div class="login-register">
                         <p>Đã có tài khoản ?
-                            <a href="#" class="login-link">Đăng nhập</a>
+                            <a href="login" class="login-link">Đăng nhập</a>
                         </p>
                     </div>
                 </form>

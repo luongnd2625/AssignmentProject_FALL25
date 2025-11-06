@@ -35,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
         try {
             // Check if username exist or not
             if (udao.isUsernameTaken(username)) {
-                request.setAttribute("error", "Username '" + username + "' đã được sử dụng!");
+                request.setAttribute("error", "Username '" + username + "' đã được sử dụng, Vui lòng đăng kí username khác !!!");
                 request.getRequestDispatcher("Register.jsp").forward(request, response);
             } else {
                 Users newUser = new Users(0, username, pass, fullname, email, phone, deptID, roleID);

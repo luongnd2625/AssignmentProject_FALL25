@@ -150,14 +150,17 @@
                 <form action="login" method="POST">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person-circle"></ion-icon></span>
-                        <input type="username" id="username" name="username" placeholder="Username" required />
+                        <input type="username" id="username" name="username" required />
                         <label for="username">Username</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" id="password" name="password" placeholder="Password" required />
+                        <input type="password" id="password" name="password" required />
                         <label for="password">Mật khẩu</label>
                     </div>
+                    <c:if test="${not empty error}">
+                        <center><a style="color: red">${error}</a></center>
+                    </c:if>
                         <button type="submit" class="btnLogin" value="Login">Đăng nhập</button>
                     <div class="login-register">
                         <p>Chưa có tài khoản ?
@@ -166,14 +169,11 @@
                     </div>
                 </form>
             </div>
-                                      
-        <c:if test="${not empty error}">
-        <center><h2 style="color: red">${error}</h2></center>
-        </c:if>
-        
         </div>
+        
         <script src="script.js" defer></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </body>
+    
 </html>
