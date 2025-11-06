@@ -5,12 +5,18 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Admin</title>
-        <link rel="stylesheet" href="style.css" />
+        <title>Admin - Quản lý Nhân sự</title>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        
+        <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
         <style>
             /* Import Noto Sans from Google Fonts */
             @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap&subset=vietnamese');
-
+            
             * {
                 margin: 0;
                 padding: 0;
@@ -22,13 +28,14 @@
                 --sidebar-width: 220px;
             }
 
+            /* --- CSS CHO SIDEBAR CỦA BẠN (GIỮ NGUYÊN) --- */
             body {
                 display: flex;
                 justify-content: flex-start;
                 align-items: flex-start;
                 min-height: 100vh;
-                background-size: cover;
-                background-position: center;
+                /* Nền xám nhạt cho khu vực nội dung */
+                background-color: #f8f9fa; 
                 padding-left: var(--sidebar-width);
             }
 
@@ -49,191 +56,144 @@
                 z-index: 99;
             }
 
-
-
-            /* Logo image sizing */
-            .logo {
-                height:64px; /* actual visible logo height */
-                width:auto;
-                display:block;
-                object-fit:contain;
-            }
-            .logo-wrap{
-                display:flex;
-                align-items:center;
-                justify-content:center; /* center the logo horizontally in the sidebar */
-                width:100%;
-                overflow:visible;
-            }
-            .logo-wrap img{
-                /* keep the logo element size but visually scale the image larger
-                   so the wrapper (.logo or .logo-wrap) dimensions don't change */
-                transform: scale(2.4);
-                transform-origin: center center;
-                height:64px;
-                width:auto;
-                display:block;
-                will-change: transform;
-            }
-
-            .navigation{
-                width:100%;
-                display:flex;
-                flex-direction:column;
-                gap:6px;
-                margin-top:8px;
-                flex: 1 1 auto; /* let nav grow so logout can be pushed to bottom */
-                align-items: stretch;
-            }
-
-            .navigation a{
-                position: relative;
-                font-size: 1.05em;
-                color: #fff;
-                text-decoration: none;
-                font-weight: 600;
-                padding: 10px 12px;
-                border-radius: 12px;
-                transition: background 0.5s ease, transform 0.25s ease, box-shadow 0.5s ease;
-            }
-
-            .navigation a:hover{
-                background: rgba(255,255,255,0.06);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-                transform: translateX(4px);
-            }
-
-            .navigation .btnLogin-popup{
-                width: 100%;
-                height: 46px;
-                background-color: transparent;
-                border: 2px solid #fff;
-                outline: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 1.05em;
-                color: #fff;
-                font-weight: 600;
-                margin-top: auto; /* push to bottom */
-                transition: background .18s ease, color .18s ease;
-            }
-
-            .navigation a::after{
-                display:none;
-            }
-            .navigation .btnLogin-popup:hover{
-                background-color:#fff;
-                color:#162928;
-            }
+            .logo { height:64px; width:auto; display:block; object-fit:contain; }
+            .logo-wrap{ display:flex; align-items:center; justify-content:center; width:100%; overflow:visible; }
+            .logo-wrap img{ transform: scale(2.4); transform-origin: center center; height:64px; width:auto; display:block; will-change: transform; }
+            .navigation{ width:100%; display:flex; flex-direction:column; gap:6px; margin-top:8px; flex: 1 1 auto; align-items: stretch; }
+            .navigation a{ position: relative; font-size: 1.05em; color: #fff; text-decoration: none; font-weight: 600; padding: 10px 12px; border-radius: 12px; transition: background 0.5s ease, transform 0.25s ease, box-shadow 0.5s ease; }
+            .navigation a:hover{ background: rgba(255,255,255,0.06); box-shadow: 0 8px 20px rgba(0,0,0,0.25); transform: translateX(4px); }
+            .navigation .btnLogin-popup{ width: 100%; height: 46px; background-color: transparent; border: 2px solid #fff; outline: none; border-radius: 8px; cursor: pointer; font-size: 1.05em; color: #fff; font-weight: 600; margin-top: auto; transition: background .18s ease, color .18s ease; }
+            .navigation a::after{ display:none; }
+            .navigation .btnLogin-popup:hover{ background-color:#fff; color:#162928; }
+            
             .content {
-                margin-left: 270px;
-                padding: 20px;
                 width: 100%;
+                padding: 30px;
+            }
+            
+            #userTable thead th {
+                background-color: #343a40;
+                color: #ffffff;
             }
 
+            
+            .password-cell {
+                -webkit-text-security: disc;
+                text-security: disc;
+            }
         </style>
     </head>
+    
     <body>
         <header>
             <nav class="navigation">
-                <a href="adminUserManagement">Quản lý nhân sự</a>
-                <a href="adminRequestManagement">Quản lí đơn</a>
-                <a href="adminAgenda">Theo dõi nghỉ phép</a>
-                <a href="userSettings">Cài đặt</a>                
-                <button class="btnLogin-popup">
-                    <a href="logout" class="logout-btn">Đăng xuất</a>
-                </button>
+                <a href="adminUserManagement">
+                    <i class="fa-solid fa-users-cog me-2"></i>Quản lý nhân sự
+                </a>
+                <a href="adminRequestManagement">
+                    <i class="fa-solid fa-file-invoice me-2"></i>Quản lí đơn
+                </a>
+                <a href="adminAgenda">
+                    <i class="fa-solid fa-calendar-alt me-2"></i>Theo dõi nghỉ phép
+                </a>
+                <a href="userSettings">
+                    <i class="fa-solid fa-cog me-2"></i>Cài đặt
+                </a>                
+                <a href="logout" class="mt-auto"> <button class="btnLogin-popup w-100">
+                        <i class="fa-solid fa-sign-out-alt me-2"></i>Đăng xuất
+                    </button>
+                </a>
             </nav>
         </header>
-    </body>
-    <div class="content">
-        <div class="container-fluid" style="padding-top: 20px;">
-            <h2 class="mb-4">Quản lý Nhân sự</h2>
+        
+        <div class="content">
+            <div class="container-fluid">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0"><i class="fa-solid fa-users me-2"></i>Quản lý Nhân sự</h2>
+                    <a href="adminUserManagement?action=add" class="btn btn-primary">
+                        <i class="fa-solid fa-user-plus me-2"></i>Thêm nhân viên mới
+                    </a>
+                </div>
 
-            <a href="adminUserManagement?action=add" class="btn btn-primary mb-3">Thêm nhân viên mới</a>
-
-            <table id="userTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Username</th>
-                        <th>Mật khẩu</th>
-                        <th>Họ và Tên</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Phòng ban</th>
-                        <th>Chức vụ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="user" items="${ulist}">
-                        <tr>
-                            <td>${user.userID}</td>
-                            <td>${user.username}</td>
-                            <td>${user.password}</td>
-                            <td>${user.fullname}</td>
-                            <td>${user.email}</td>
-                            <td>${user.phone}</td>
-
-                            <td>
-                                <c:forEach var="dept" items="${dlist}">
-                                    <c:if test="${dept.deptID == user.deptID}">
-                                        ${dept.deptName}
-                                    </c:if>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Danh sách nhân viên</h5>
+                    </div>
+                    <div class="card-body">
+                        <table id="userTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Mật khẩu</th>
+                                    <th>Họ và Tên</th>
+                                    <th>Email</th>
+                                    <th>Điện thoại</th>
+                                    <th>Phòng ban</th>
+                                    <th>Chức vụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="user" items="${ulist}">
+                                    <tr>
+                                        <td>${user.userID}</td>
+                                        <td>${user.username}</td>
+                                        
+                                        <td class="password-cell">${user.password}</td>
+                                        
+                                        <td>${user.fullname}</td>
+                                        <td>${user.email}</td>
+                                        <td>${user.phone}</td>
+                                        
+                                        <td>
+                                            <c:forEach var="dept" items="${dlist}">
+                                                <c:if test="${dept.deptID == user.deptID}">
+                                                    ${dept.deptName}
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        
+                                        <td>
+                                            <c:forEach var="r" items="${rlist}">
+                                                <c:if test="${r.roleID == user.roleID}">
+                                                    <c:choose>
+                                                        <c:when test="${r.roleID == 0}">
+                                                            <span class="badge bg-danger">${r.roleName}</span>
+                                                        </c:when>
+                                                        <c:when test="${r.roleID == 1}">
+                                                            <span class="badge bg-success">${r.roleName}</span>
+                                                        </c:when>
+                                                        <c:when test="${r.roleID == 2}">
+                                                            <span class="badge bg-info">${r.roleName}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge bg-secondary">${r.roleName}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                    </tr>
                                 </c:forEach>
-                            </td>
-
-                            <td>
-                                <c:forEach var="r" items="${rlist}">
-                                    <c:if test="${r.roleID == user.roleID}">
-                                        ${r.roleName}
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#userTable').DataTable();
-        });
-        // Hàm xử lý xóa người dùng với SweetAlert
-        $(document).ready(function () {
-            $(document).on('click', '.del', function () {
-                let userId = $(this).val(); // Lấy userId từ button
-                console.log("User ID cần xóa:", userId); // Kiểm tra xem có lấy đúng userId không
-
-                if (!userId) {
-                    alert("Lỗi: Không lấy được userId.");
-                    return;
-                }
-
-                swal({
-                    title: "Cảnh báo!",
-                    text: "Bạn có chắc chắn muốn xóa người dùng này?",
-                    icon: "warning",
-                    buttons: ["Hủy bỏ", "Đồng ý"],
-                    dangerMode: true,
-                }).then((confirmDelete) => {
-                    if (confirmDelete) {
-                        swal("Đã xóa thành công!", {
-                            icon: "success",
-                            timer: 1500,
-                            buttons: false
-                        }).then(() => {
-                            window.location.href = "adminUserManagement?action=delete&userId=" + userId;
-                        });
+                            </tbody>
+                        </table>
+                    </div>
+                </div> </div> </div> <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
+        <script>
+            // Sửa lại cách gọi DataTables để tích hợp với Bootstrap 5
+            $(document).ready(function () {
+                $('#userTable').DataTable({
+                    // Tùy chọn: Thêm ngôn ngữ Tiếng Việt cho DataTables
+                    language: {
+                        "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json"
                     }
                 });
             });
-        });
 
-    </script>
+        </script>
+        </body>
 </html>
