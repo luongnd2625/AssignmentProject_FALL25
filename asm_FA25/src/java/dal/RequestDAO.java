@@ -1,6 +1,7 @@
 package dal;
 
 import Model.Request;
+import Model.Users;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -153,5 +154,88 @@ public class RequestDAO extends DBcontext {
             e.printStackTrace();
         }
     }
-    //Filter of request
+    /**
+     * Lấy tất cả các request được gửi đến một người duyệt (approver) cụ thể.
+     * @param approverID UserID của người duyệt (Manager/Leader/Admin)
+     * @return Danh sách các request
+     */
+    public List<Request> getRequestsForApprover(int approverID) {
+        List<Request> list = new ArrayList<>();
+        // Lấy tất cả các request có approverID là bạn, VÀ đang chờ (Pending)
+        String sql = "SELECT * FROM Request WHERE approverID = ? AND statusID = 1";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, approverID);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()) {
+                int reqID = rs.getInt("reqID");
+                String title = rs.getString("title");
+                int userID = rs.getInt("userID"); // ID của người gửi đơn
+                Date fromDate = rs.getDate("fromDate");
+                Date toDate = rs.getDate("toDate");
+                String reason = rs.getString("reason");
+                int statusID = rs.getInt("statusID");
+                String approverNote = rs.getString("approverNote");
+                Request r = new Request(reqID, title, userID, fromDate, toDate, reason, statusID, approverID, approverNote);
+                list.add(r);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+    
+    /**
+     * LẤY DANH SÁCH ĐƠN MÀ TÔI CÓ THỂ DUYỆT (LOGIC MỚI: TÍCH LŨY)
+     * @param currentUser Người dùng (Manager/Leader/Admin) đang đăng nhập
+     * @return Danh sách các đơn (Pending) mà người này có quyền duyệt
+     */
+    public List<Request> getApprovableRequests(Users currentUser) {
+        List<Request> list = new ArrayList<>();
+        String sql = "";
+        
+        int userRole = currentUser.getRoleID();
+        int userDept = currentUser.getDeptID();
+
+        if (userRole == 3) {
+            // Role 3 (Employee) không duyệt đơn của ai cả
+            return list;
+        }
+
+        if (userRole == 0) {
+            // Role 0 (Admin) -> Thấy đơn của Role 1, 2, 3 (TẤT CẢ PHÒNG BAN)
+            sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
+                  "WHERE r.statusID = 1 AND u.roleID IN (1, 2, 3)";
+        } else if (userRole == 1) {
+            // Role 1 (Manager) -> Thấy đơn của Role 2, 3 (TRONG PHÒNG BAN)
+            sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
+                  "WHERE r.statusID = 1 AND u.deptID = ? AND u.roleID IN (2, 3)";
+        } else if (userRole == 2) {
+            // Role 2 (Leader) -> Thấy đơn của Role 3 (TRONG PHÒNG BAN)
+            sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
+                  "WHERE r.statusID = 1 AND u.deptID = ? AND u.roleID = 3";
+        }
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            
+            // Chỉ set deptID nếu người duyệt KHÔNG PHẢI là Admin
+            if (userRole == 1 || userRole == 2) {
+                st.setInt(1, userDept);
+            }
+            
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Request r = new Request(
+                        rs.getInt("reqID"), rs.getString("title"), rs.getInt("userID"),
+                        rs.getDate("fromDate"), rs.getDate("toDate"), rs.getString("reason"),
+                        rs.getInt("statusID"), rs.getInt("approverID"), rs.getString("approverNote")
+                );
+                list.add(r);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
 }
