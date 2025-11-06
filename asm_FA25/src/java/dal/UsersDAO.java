@@ -214,34 +214,41 @@ public class UsersDAO extends DBcontext{
         }
     }
     /**
-     * Lấy UserID của người duyệt đơn TỰ ĐỘNG dựa trên quy tắc nghiệp vụ.
-     * (PHIÊN BẢN ĐÃ SỬA LỖI THIẾU THAM SỐ)
-     * @param userDeptID Phòng ban của người gửi
+     * Lấy UserID của người duyệt đơn TỰ ĐỘNG
+     * THEO LOGIC MỚI (Đa cấp: 3->2, 2->1, 1->0)
+     * * @param userDeptID Phòng ban của người gửi
      * @param userRoleID Vai trò của người gửi
      * @return UserID của người duyệt, hoặc null nếu không tìm thấy.
      */
     public Integer getAutomaticApproverID(int userDeptID, int userRoleID) {
         String sql = "";
-        Integer approverRole = null; // Vai trò của người cần TÌM
-        if (userRoleID == 3 || userRoleID == 2) {
-            // Role 3 & 2 -> Gửi cho Role 1 (Manager) CÙNG PHÒNG BAN
-            approverRole = 1;
+        Integer approverRoleToFind = null; // Vai trò của người chúng ta cần TÌM
+        if (userRoleID == 3) {
+            // Role 3 (Employee) -> Gửi cho Role 2 (Leader) CÙNG PHÒNG BAN
+            approverRoleToFind = 2; 
+            sql = "SELECT TOP 1 userID FROM Users WHERE deptID = ? AND roleID = ?";
+        } else if (userRoleID == 2) {
+            // Role 2 (Leader) -> Gửi cho Role 1 (Manager) CÙNG PHÒNG BAN
+            approverRoleToFind = 1;
             sql = "SELECT TOP 1 userID FROM Users WHERE deptID = ? AND roleID = ?";
         } else if (userRoleID == 1) {
             // Role 1 (Manager) -> Gửi cho Role 0 (Admin)
-            approverRole = 0;
+            approverRoleToFind = 0;
             sql = "SELECT TOP 1 userID FROM Users WHERE roleID = ?";
         } else {
             // Role 0 (Admin) không gửi đơn
-            return null;
+            return null; 
         }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            if (approverRole == 1) { // Nếu tìm Manager (Role 1)
-                st.setInt(1, userDeptID);   // Tham số 1: deptID
-                st.setInt(2, approverRole); // Tham số 2: roleID 
-            } else if (approverRole == 0) { // Nếu tìm Admin (Role 0)
-                st.setInt(1, approverRole); // Tham số 1: roleID
+            
+            if (approverRoleToFind == 2 || approverRoleToFind == 1) { 
+                // Nếu tìm Leader (2) hoặc Manager (1) -> Cần deptID
+                st.setInt(1, userDeptID);
+                st.setInt(2, approverRoleToFind);
+            } else if (approverRoleToFind == 0) { 
+                // Nếu tìm Admin (0) -> Không cần deptID
+                st.setInt(1, approverRoleToFind);
             }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -250,10 +257,9 @@ public class UsersDAO extends DBcontext{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
-        // Trả về null nếu không tìm thấy 
+        // Trả về null nếu không tìm thấy
+        // (Ví dụ: Role 3 gửi đơn nhưng phòng ban chưa có Role 2)
         return null; 
     }
-    
     
 }
