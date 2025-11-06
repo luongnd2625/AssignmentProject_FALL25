@@ -156,12 +156,26 @@
 
         <div class="content">
             <div class="container-fluid">
+                <c:if test="${not empty sessionScope.admin_message_error}">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Thất bại!</strong> ${sessionScope.admin_message_error}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <c:remove var="admin_message_error" scope="session" />
+                </c:if>
 
+                <c:if test="${not empty sessionScope.admin_message_success}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Thành công!</strong> ${sessionScope.admin_message_success}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <c:remove var="admin_message_success" scope="session" />
+                </c:if>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="mb-0"><i class="fa-solid fa-users me-2"></i>Quản lý Nhân sự</h2>
-                    <a href="adminUserManagement?action=add" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="fa-solid fa-user-plus me-2"></i>Thêm nhân viên mới
-                    </a>
+                    </button>
                 </div>
 
                 <div class="card shadow-sm">
@@ -324,6 +338,80 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <form action="adminUserManagement" method="POST">
+                                <input type="hidden" name="action" value="addSave">
+
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title" id="addUserModalLabel">
+                                        <i class="fa-solid fa-user-plus me-2"></i>Thêm nhân viên mới
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="username" class="form-label">Tên đăng nhập (Username)</label>
+                                                <input type="text" class="form-control" id="username" name="username" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label">Mật khẩu</label>
+                                                <input type="password" class="form-control" id="password" name="password" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="fullname" class="form-label">Họ và Tên</label>
+                                                <input type="text" class="form-control" id="fullname" name="fullname" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Số điện thoại</label>
+                                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label for="deptID" class="form-label">Phòng ban</label>
+                                            <select class="form-select" id="deptID" name="deptID" required>
+                                                <option value="" disabled selected>-- Chọn phòng ban --</option>
+                                                <c:forEach var="d" items="${dlist}">
+                                                    <option value="${d.deptID}">${d.deptName}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="roleID" class="form-label">Chức vụ</label>
+                                            <select class="form-select" id="roleID" name="roleID" required>
+                                                <option value="" disabled selected>-- Chọn chức vụ --</option>
+                                                <c:forEach var="r" items="${rlist}">
+                                                    <option value="${r.roleID}">${r.roleName}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fa-solid fa-save me-2"></i>Lưu nhân viên
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
@@ -364,7 +452,7 @@
                         $('.delete-btn').on('click', function () {
                             var button = $(this);
                             var userID = button.data('userid');
-                            var userName = button.data('username'); 
+                            var userName = button.data('username');
 
                             Swal.fire({
                                 title: 'Bạn có chắc chắn?',
