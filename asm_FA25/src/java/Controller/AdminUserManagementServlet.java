@@ -61,7 +61,7 @@ public class AdminUserManagementServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String action = request.getParameter("action");
+        String action = request.getParameter("action");
 
         UsersDAO udao = new UsersDAO();
         DepartmentDAO ddao = new DepartmentDAO();
@@ -81,7 +81,7 @@ public class AdminUserManagementServlet extends HttpServlet {
             for (Department d : dlist) {
                 System.out.println("DEPARTMENT LIST: " + d);
             }
-            request.getRequestDispatcher("ADMIN_UserAdd.jsp").forward(request, response);
+            request.getRequestDispatcher("Admin_UserAdd.jsp").forward(request, response);
             return;
         } else if (action != null && action.equalsIgnoreCase("delete")) {
             int userId = Integer.parseInt(request.getParameter("userId"));
@@ -89,13 +89,11 @@ public class AdminUserManagementServlet extends HttpServlet {
             response.sendRedirect("adminUserManagement");
             return;
         }
-
         request.setAttribute("ulist", ulist);
         request.setAttribute("dlist", dlist);
         request.setAttribute("rlist", rlist);
-        request.getRequestDispatcher("ADMIN_UserManagement.jsp").forward(request, response);
+        request.getRequestDispatcher("Admin_UserManagement.jsp").forward(request, response);
     }
-
     @Override
     public String getServletInfo() {
         return "description";
