@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
         try {
             Users n = d.getUsersByUsernameAndPassword(user, pass);
             if(n ==  null) {
-                req.setAttribute("error", "Wrong username or password, try again !!!");
+                req.setAttribute("error", "Sai username hoặc mật khẩu");
                 req.getRequestDispatcher("Login.jsp").forward(req, resp);
             } else {
                 session.setAttribute("user", n);
