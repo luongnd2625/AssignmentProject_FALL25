@@ -17,64 +17,69 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-public class Authfilter implements Filter{
+public class AuthFilter implements Filter{
     
     private static final boolean debug = true;
     private FilterConfig filterConfig = null;
-
-    protected void doBeforeProcessing(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (debug) {
-            log("AuthFilter:DoBeforeProcessing");
-        }
-    }
-    
-    protected void doAfterProcessing(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (debug) {
-            log("AuthFilter:DoAfterProcessing");
-        }
-    }
     
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
-        
-        boolean loggedIn = (session != null && session.getAttribute("user") != null);
-        
+        String contextPath = httpRequest.getContextPath();
         String requestURI = httpRequest.getRequestURI();
-        //Create all page that role > 0 can access, Admin page only access by roleID=0
-        boolean LoginPage = requestURI.endsWith("/login");
-        boolean RegisterPage = requestURI.endsWith("/register");
-        boolean LogoutPage = requestURI.endsWith("/logout");
-        
-        boolean UserAgendaPage = requestURI.endsWith("/userAgenda");
-        boolean UserRequestManagement = requestURI.endsWith("/userRequestManagement");
-        boolean UserRequest = requestURI.endsWith("/userRequest");
-        boolean UserRequestView = requestURI.endsWith("/userRequestView");
-        boolean UserSettings = requestURI.endsWith("/userSettings");
-        
-        boolean allowedForRole3 = LoginPage || RegisterPage || LogoutPage || UserRequest || UserRequestView || UserSettings;
-        boolean allowedForRole1And2 = allowedForRole3 || UserAgendaPage || UserRequestManagement;
-        
-        if (!loggedIn && !LoginPage && !RegisterPage) { //If user isn't logged in, navigate to login page
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
-        }
-        
-        if(loggedIn) {
-            Users user = (Users)session.getAttribute("user");
-            int roleID = user.getRoleID();
-            
-            if(roleID == 3 && !allowedForRole3) {   //Navigate if role 3 
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/userRequest");
-                return;
-            } else if ((roleID == 1 || roleID == 2) && !allowedForRole1And2 ) { //Navigate if role 1 or 2
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/userRequestManagement");
-                return;
+
+        boolean loggedIn = (session != null && session.getAttribute("user") != null);
+        // Page don't need login
+        boolean isLoginPage = requestURI.endsWith("/login");
+        boolean isRegisterPage = requestURI.endsWith("/register");
+
+        // Skip element of UI
+        boolean isStaticResource = requestURI.contains("/Background/")
+                || requestURI.endsWith(".css")
+                || requestURI.endsWith(".js")
+                || requestURI.endsWith(".png")
+                || requestURI.endsWith(".jpg")
+                || requestURI.endsWith(".gif");
+
+        // Check if user logged in
+        if (loggedIn || isLoginPage || isRegisterPage || isStaticResource) {
+
+            // Check authorization
+            if (loggedIn) {
+                Users user = (Users) session.getAttribute("user");
+                int roleID = user.getRoleID();
+                
+                // Take URL that user's trying to go
+                String targetPath = requestURI.substring(contextPath.length());
+
+                // Area of each role
+                boolean isAdminArea = targetPath.startsWith("/admin");
+                boolean isManagerArea = targetPath.endsWith("/userAgenda") || targetPath.endsWith("/userRequestManagement");
+                
+                // --- Logic authorization ---
+
+                // If role 3 try to go page that need higher role
+                if (roleID == 3 && (isAdminArea || isManagerArea)) {
+                    httpResponse.sendRedirect(contextPath + "/userRequest");
+                    return;
+                } 
+                // If role 1,2 try to go admin
+                else if ((roleID == 1 || roleID == 2) && isAdminArea) {
+                    httpResponse.sendRedirect(contextPath + "/userRequestManagement");
+                    return;
+                }
             }
-            //Role 0 can access all page
+
+            // Admin can access all page
+            chain.doFilter(request, response);
+
+        } else {
+            //If not login, go to login
+            httpResponse.sendRedirect(contextPath + "/login");
+            return; // THÊM RETURN
         }
-        chain.doFilter(request, response);
     }
 
     public FilterConfig getFilterConfig() {
