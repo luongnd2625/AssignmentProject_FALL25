@@ -262,4 +262,52 @@ public class UsersDAO extends DBcontext{
         return null; 
     }
     
+    /**
+     * Lấy danh sách nhân viên cho trang "Agenda" (Lịch nghỉ).
+     * LOGIC:
+     * - Role 0 (Admin) -> Thấy tất cả user (trừ chính mình).
+     * - Role 1 & 2 (Manager/Leader) -> Thấy tất cả user TRONG PHÒNG BAN.
+     * @param currentUser (Admin/Manager/Leader)
+     * @return Danh sách nhân viên
+     */
+    public List<Users> getAgendaViewableUsers(Users currentUser) {
+        List<Users> list = new ArrayList<>();
+        String sql = "";
+
+        if (currentUser.getRoleID() == 0) {
+            // Role 0 (Admin) -> Lấy tất cả user (trừ Admin roleID=0)
+            sql = "SELECT * FROM Users WHERE roleID != 0 ORDER BY deptID, fullname";
+        } else {
+            // Role 1 & 2 (Manager/Leader) -> Lấy tất cả user TRONG PHÒNG BAN
+            sql = "SELECT * FROM Users WHERE deptID = ? ORDER BY roleID, fullname";
+        }
+        
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            
+            // Nếu không phải Admin, set tham số deptID
+            if (currentUser.getRoleID() != 0) {
+                st.setInt(1, currentUser.getDeptID());
+            }
+            
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Users u = new Users(
+                        rs.getInt("userID"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("fullname"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getInt("deptID"),
+                        rs.getInt("roleID")
+                );
+                list.add(u);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+    
 }

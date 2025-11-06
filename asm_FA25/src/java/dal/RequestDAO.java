@@ -238,4 +238,41 @@ public class RequestDAO extends DBcontext {
         }
         return list;
     }
+    
+    /**
+     * Lấy tất cả các đơn ĐÃ ĐƯỢC DUYỆT (Approved) trong một tháng cụ thể.
+     * Dùng để tô màu lịch nghỉ.
+     * @param year (Vd: 2025)
+     * @param month (Vd: 11)
+     * @return Danh sách các đơn đã duyệt
+     */
+    public List<Request> getApprovedRequestsByMonth(int year, int month) {
+        List<Request> list = new ArrayList<>();
+        // Lấy tất cả các đơn có statusID = 2 (Approved) VÀ
+        // có ngày bắt đầu (fromDate) hoặc ngày kết thúc (toDate) nằm trong tháng đó
+        String sql = "SELECT * FROM Request WHERE statusID = 2 AND " +
+                     "( (YEAR(fromDate) = ? AND MONTH(fromDate) = ?) OR " +
+                     "  (YEAR(toDate) = ? AND MONTH(toDate) = ?) )";
+        
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, year);
+            st.setInt(2, month);
+            st.setInt(3, year);
+            st.setInt(4, month);
+            
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Request r = new Request(
+                        rs.getInt("reqID"), rs.getString("title"), rs.getInt("userID"),
+                        rs.getDate("fromDate"), rs.getDate("toDate"), rs.getString("reason"),
+                        rs.getInt("statusID"), rs.getInt("approverID"), rs.getString("approverNote")
+                );
+                list.add(r);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
 }
