@@ -198,6 +198,21 @@ public class UsersDAO extends DBcontext{
         }
         return false;
     }
+    //Update user's OWN profile (for UserSettings)
+    public void updateUserProfile(Users users){
+        String query = "UPDATE Users SET password = ?, fullname = ?, email = ?, phone = ? WHERE userID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setString(1, users.getPassword());
+            st.setString(2, users.getFullname());
+            st.setString(3, users.getEmail());
+            st.setString(4, users.getPhone());
+            st.setInt(5, users.getUserID()); // Use userID to check owner
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
     
     
 }
