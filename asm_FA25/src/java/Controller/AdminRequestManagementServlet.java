@@ -32,7 +32,7 @@ public class AdminRequestManagementServlet extends HttpServlet {
         StatusDAO sdao = new StatusDAO();
         List<Status> statusOptions = sdao.getAll(); // (Approved, Rejected)
         // 4. Gửi các danh sách này sang JSP
-        request.setAttribute("pendingRequests", allRequests);
+        request.setAttribute("allRequests", allRequests);
         request.setAttribute("allUsers", allUsers);
         request.setAttribute("statusOptions", statusOptions);
         // 5. Chuyển tiếp đến trang JSP của Admin
