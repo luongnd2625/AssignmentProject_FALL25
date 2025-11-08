@@ -24,15 +24,15 @@ public class AdminRequestManagementServlet extends HttpServlet {
         // 1. Lấy danh sách ĐƠN CẦN BẠN DUYỆT (dùng hàm logic tích lũy)
         // Vì currentUser.getRoleID() == 0, hàm này sẽ tự động chạy logic của Admin
         RequestDAO rdao = new RequestDAO();
-        List<Request> pendingRequests = rdao.getApprovableRequests(currentUser);
+        List<Request> allRequests = rdao.getApprovableRequests(currentUser);
         // 2. Lấy danh sách TẤT CẢ USER (để tìm tên người gửi đơn)
         UsersDAO udao = new UsersDAO();
         List<Users> allUsers = udao.getAll();
         // 3. Lấy danh sách TẤT CẢ STATUS (để dùng cho Modal)
         StatusDAO sdao = new StatusDAO();
-        List<Status> statusOptions = sdao.getAll2(); // (Approved, Rejected)
+        List<Status> statusOptions = sdao.getAll(); // (Approved, Rejected)
         // 4. Gửi các danh sách này sang JSP
-        request.setAttribute("pendingRequests", pendingRequests);
+        request.setAttribute("pendingRequests", allRequests);
         request.setAttribute("allUsers", allUsers);
         request.setAttribute("statusOptions", statusOptions);
         // 5. Chuyển tiếp đến trang JSP của Admin

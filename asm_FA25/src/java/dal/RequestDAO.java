@@ -205,7 +205,7 @@ public class RequestDAO extends DBcontext {
         if (userRole == 0) {
             // Role 0 (Admin) -> Thấy đơn của Role 1, 2, 3 (TẤT CẢ PHÒNG BAN)
             sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
-                  "WHERE r.statusID = 1 AND u.roleID IN (1, 2, 3)";
+                  "WHERE u.roleID IN (1, 2, 3)";
         } else if (userRole == 1) {
             // Role 1 (Manager) -> Thấy đơn của Role 2, 3 (TRONG PHÒNG BAN)
             sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
