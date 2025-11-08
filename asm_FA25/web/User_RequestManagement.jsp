@@ -140,6 +140,7 @@
                             <i class="fa-solid fa-user-shield me-2"></i>
                     ${roleName} ${deptName} department: ${user.fullname}
                 </h5>
+                
                 <c:if test="${not empty sessionScope.user_message_error}"><div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Thất bại!</strong> ${sessionScope.user_message_error}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="user_message_error" scope="session" /></c:if>
                 <c:if test="${not empty sessionScope.user_message_success}"><div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Thành công!</strong> ${sessionScope.user_message_success}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="user_message_success" scope="session" /></c:if>
 

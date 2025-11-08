@@ -177,6 +177,7 @@
                             <i class="fa-solid fa-user-shield me-2"></i>
                     ${roleName} ${deptName} department: ${user.fullname}
                 </h5>
+
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
                         <form action="userAgenda" method="POST" class="row g-3 align-items-end">
