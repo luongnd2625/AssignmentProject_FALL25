@@ -1,4 +1,5 @@
 <%@ page contentType="text-html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- SỬ DỤNG THƯ VIỆN GỐC CỦA BẠN (theo lượt 95) --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 
@@ -8,7 +9,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Admin - Quản lí đơn</title>
-
+        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -16,93 +17,22 @@
         <style>
             /* (Toàn bộ CSS sidebar... Giữ nguyên) */
             @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap&subset=vietnamese');
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: 'Be Vietnam Pro', sans-serif;
-            }
-            :root{
-                --sidebar-width: 220px;
-            }
-            body {
-                display: flex;
-                justify-content: flex-start;
-                align-items: flex-start;
-                min-height: 100vh;
-                background-color: #f8f9fa;
-                padding-left: var(--sidebar-width);
-            }
-            header {
-                background: url(Background/Bg.png) no-repeat;
-                background-size: cover;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: var(--sidebar-width);
-                height: 100vh;
-                padding: 28px 16px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 18px;
-                z-index: 99;
-            }
-            .navigation{
-                width:100%;
-                display:flex;
-                flex-direction:column;
-                gap:6px;
-                margin-top:8px;
-                flex: 1 1 auto;
-                align-items: stretch;
-            }
-            .navigation a{
-                position: relative;
-                font-size: 1.05em;
-                color: #fff;
-                text-decoration: none;
-                font-weight: 600;
-                padding: 10px 12px;
-                border-radius: 12px;
-                transition: background 0.5s ease, transform 0.25s ease, box-shadow 0.5s ease;
-            }
-            .navigation a:hover{
-                background: rgba(255,255,255,0.06);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-                transform: translateX(4px);
-            }
-            .navigation .btnLogin-popup{
-                width: 100%;
-                height: 46px;
-                background-color: transparent;
-                border: 2px solid #fff;
-                outline: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 1.05em;
-                color: #fff;
-                font-weight: 600;
-                margin-top: auto;
-                transition: background .18s ease, color .18s ease;
-            }
-            .navigation a::after{
-                display:none;
-            }
-            .navigation .btnLogin-popup:hover{
-                background-color:#fff;
-                color:#162928;
-            }
-            .content {
-                width: 100%;
-                padding: 30px;
-            }
+            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Be Vietnam Pro', sans-serif; }
+            :root{ --sidebar-width: 220px; }
+            body { display: flex; justify-content: flex-start; align-items: flex-start; min-height: 100vh; background-color: #f8f9fa; padding-left: var(--sidebar-width); }
+            header { background: url(Background/Bg.png) no-repeat; background-size: cover; position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh; padding: 28px 16px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 18px; z-index: 99; }
+            .navigation{ width:100%; display:flex; flex-direction:column; gap:6px; margin-top:8px; flex: 1 1 auto; align-items: stretch; }
+            .navigation a{ position: relative; font-size: 1.05em; color: #fff; text-decoration: none; font-weight: 600; padding: 10px 12px; border-radius: 12px; transition: background 0.5s ease, transform 0.25s ease, box-shadow 0.5s ease; }
+            .navigation a:hover{ background: rgba(255,255,255,0.06); box-shadow: 0 8px 20px rgba(0,0,0,0.25); transform: translateX(4px); }
+            .navigation .btnLogin-popup{ width: 100%; height: 46px; background-color: transparent; border: 2px solid #fff; outline: none; border-radius: 8px; cursor: pointer; font-size: 1.05em; color: #fff; font-weight: 600; margin-top: auto; transition: background .18s ease, color .18s ease; }
+            .navigation a::after{ display:none; }
+            .navigation .btnLogin-popup:hover{ background-color:#fff; color:#162928; }
+            .content { width: 100%; padding: 30px; }
         </style>
     </head>
-
+    
     <body>
-
+        
         <header>
             <nav class="navigation">
                 <a href="adminUserManagement"><i class="fa-solid fa-users-cog me-2"></i>Quản lý nhân sự</a>
@@ -114,39 +44,40 @@
                 </a>
             </nav>
         </header>
-
+        
         <div class="content">
             <div class="container-fluid">
-
+                
                 <h2 class="mb-4"><i class="fa-solid fa-file-invoice me-2"></i>Quản lý Đơn (Toàn hệ thống)</h2>
 
                 <c:if test="${not empty sessionScope.admin_message_error}"><div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Thất bại!</strong> ${sessionScope.admin_message_error}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="admin_message_error" scope="session" /></c:if>
                 <c:if test="${not empty sessionScope.admin_message_success}"><div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Thành công!</strong> ${sessionScope.admin_message_success}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="admin_message_success" scope="session" /></c:if>
-
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <table id="manageRequestTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>ID Đơn</th>
-                                        <th>Người gửi</th>
-                                        <th>Tiêu đề</th>
-                                        <th>Từ ngày</th>
-                                        <th>Lý do</th>
-                                        <th>Trạng thái</th> <th>Người duyệt</th> <th>Ghi chú</th> <th>Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table id="manageRequestTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID Đơn</th>
+                                    <th>Người gửi</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Từ ngày</th>
+                                    <th>Lý do</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người duyệt</th>
+                                    <th>Ghi chú</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <c:forEach var="req" items="${allRequests}">
                                     <tr>
                                         <td>${req.reqID}</td>
-                                        <td>
-                                            <c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach>
-                                                </td>
-                                                <td>${req.title}</td>
+                                        <td><c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach></td>
+                                        <td>${req.title}</td>
                                         <td><fmt:formatDate value="${req.fromDate}" pattern="dd/MM/yyyy" /></td>
                                         <td>${req.reason}</td>
-
+                                        
                                         <td>
                                             <c:forEach var="s" items="${statusOptions}">
                                                 <c:if test="${req.statusID == s.statusID}">
@@ -160,26 +91,49 @@
                                                 </c:if>
                                             </c:forEach>
                                         </td>
-
+                                        
                                         <td>
                                             <c:if test="${empty req.approverID}">-</c:if>
                                             <c:forEach var="u" items="${allUsers}"><c:if test="${req.approverID == u.userID}">${u.fullname}</c:if></c:forEach>
-                                                </td>
-
-                                                <td>${empty req.approverNote ? '-' : req.approverNote}</td>
-
+                                        </td>
+                                        
+                                        <td>${empty req.approverNote ? '-' : req.approverNote}</td>
+                                        
                                         <td>
+                                            <c:set var="approverRoleID" value="99" /> <%-- Mặc định là 99 (thấp nhất) --%>
+                                            <c:if test="${not empty req.approverID}">
+                                                <c:forEach var="u" items="${allUsers}">
+                                                    <c:if test="${req.approverID == u.userID}">
+                                                        <c:set var="approverRoleID" value="${u.roleID}" />
+                                                    </c:if>
+                                                </c:forEach>
+                                            </c:if>
+
+                                            <c:set var="canProcess" value="false" />
+                                            
                                             <c:if test="${req.statusID == 1}">
+                                                <c:set var="canProcess" value="true" />
+                                            </c:if>
+                                            
+                                            <c:if test="${req.statusID == 2 || req.statusID == 3}">
+                                                <c:if test="${sessionScope.user.roleID <= approverRoleID}">
+                                                    <c:set var="canProcess" value="true" />
+                                                </c:if>
+                                            </c:if>
+                                            
+                                            <c:if test="${canProcess}">
                                                 <button class="btn btn-primary btn-sm approve-btn"
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#approveModal"
                                                         data-reqid="${req.reqID}"
-                                                        data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>">
-                                                                <i class="fa-solid fa-check-to-slot"></i> Xử lý
-                                                            </button>
+                                                        data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>"
+                                                        data-currentstatus="${req.statusID}"
+                                                        data-currentnote="${req.approverNote}">
+                                                    <i class="fa-solid fa-check-to-slot"></i> Xử lý
+                                                </button>
                                             </c:if>
                                         </td>
-                                    </tr>
+                                        </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
@@ -199,7 +153,11 @@
                                 <label for="statusID" class="form-label">Hành động</label>
                                 <select class="form-select" id="statusID" name="statusID" required>
                                     <option value="" disabled selected>-- Chọn hành động --</option>
-                                    <c:forEach var="s" items="${statusOptions}"><option value="${s.statusID}">${s.statusName}</option></c:forEach>
+                                    <c:forEach var="s" items="${statusOptions}">
+                                        <c:if test="${s.statusID == 2 || s.statusID == 3}">
+                                            <option value="${s.statusID}">${s.statusName}</option>
+                                        </c:if>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -220,21 +178,41 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
+        
         <script>
             $(document).ready(function () {
                 $('#manageRequestTable').DataTable({
-                    language: {"url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json"},
-                    "order": [[0, "desc"]] // Sắp xếp ID giảm dần
+                    language: { "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json" },
+                    "order": [[ 0, "desc" ]] // Sắp xếp ID giảm dần
                 });
+
+                // =============================================
+                // BẮT ĐẦU: TỐI ƯU HÓA JAVASCRIPT MODAL
+                // =============================================
                 $('.approve-btn').on('click', function () {
                     var button = $(this);
                     var reqID = button.data('reqid');
                     var requesterName = button.data('requestername');
+                    var currentStatus = button.data('currentstatus'); // Lấy status hiện tại
+                    var currentNote = button.data('currentnote');     // Lấy note hiện tại
+
+                    // Điền dữ liệu vào Modal
                     $('#modal_reqID').val(reqID);
                     $('#modal_requesterName').text(requesterName);
-                    $('#statusID').val('');
-                    $('#approverNote').val('');
+                    
+                    // SỬA: Tự động điền thông tin cũ nếu đơn đã được xử lý (2 hoặc 3)
+                    if (currentStatus == 2 || currentStatus == 3) {
+                        $('#statusID').val(currentStatus);
+                        $('#approverNote').val(currentNote);
+                    } else {
+                        // Reset nếu là đơn Pending (1)
+                        $('#statusID').val('');
+                        $('#approverNote').val('');
+                    }
                 });
+                // =============================================
+                // KẾT THÚC: TỐI ƯU HÓA JAVASCRIPT MODAL
+                // =============================================
             });
         </script>
     </body>
