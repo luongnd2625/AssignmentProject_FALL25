@@ -1,7 +1,6 @@
 <%@ page contentType="text-html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
-
 <!doctype html>
 <html lang="vi">
     <head>
@@ -37,13 +36,7 @@
             <nav class="navigation">
                 <c:choose>
                     <c:when test="${userRole == 0 || userRole == '0'}">
-                        <a href="adminUserManagement"><i class="fa-solid fa-users-cog me-2"></i>Quản lý nhân sự</a>
-                        <a href="adminRequestManagement" style="background: rgba(255,255,255,0.1);">
-                            <i class="fa-solid fa-file-invoice me-2"></i>Quản lí đơn
-                        </a>
-                        <a href="adminAgenda"><i class="fa-solid fa-calendar-alt me-2"></i>Theo dõi nghỉ phép</a>
-                        <a href="userSettings"><i class="fa-solid fa-cog me-2"></i>Cài đặt</a>
-                    </c:when>
+                        </c:when>
                     <c:otherwise>
                         <c:if test="${userRole == 1 || userRole == 2}">
                             <a href="userAgenda"><i class="fa-solid fa-calendar-alt me-2"></i>Theo dõi nghỉ phép</a>
@@ -67,22 +60,10 @@
         <div class="content">
             <div class="container-fluid">
                 
-                <h2 class="mb-4"><i class="fa-solid fa-file-invoice me-2"></i>Các đơn chờ duyệt</h2>
+                <h2 class="mb-4"><i class="fa-solid fa-file-invoice me-2"></i>Quản lý Đơn (Phòng ban)</h2>
 
-                <c:if test="${not empty sessionScope.user_message_error}">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Thất bại!</strong> ${sessionScope.user_message_error}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <c:remove var="user_message_error" scope="session" />
-                </c:if>
-                <c:if test="${not empty sessionScope.user_message_success}">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Thành công!</strong> ${sessionScope.user_message_success}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <c:remove var="user_message_success" scope="session" />
-                </c:if>
+                <c:if test="${not empty sessionScope.user_message_error}"><div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Thất bại!</strong> ${sessionScope.user_message_error}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="user_message_error" scope="session" /></c:if>
+                <c:if test="${not empty sessionScope.user_message_success}"><div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Thành công!</strong> ${sessionScope.user_message_success}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="user_message_success" scope="session" /></c:if>
                 
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -93,34 +74,52 @@
                                     <th>Người gửi</th>
                                     <th>Tiêu đề</th>
                                     <th>Từ ngày</th>
-                                    <th>Đến ngày</th>
                                     <th>Lý do</th>
-                                    <th>Hành động</th>
+                                    <th>Trạng thái</th> <th>Người duyệt</th> <th>Ghi chú</th> <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="req" items="${pendingRequests}">
+                                <c:forEach var="req" items="${allRequests}">
                                     <tr>
                                         <td>${req.reqID}</td>
                                         <td>
-                                            <c:forEach var="u" items="${allUsers}">
-                                                <c:if test="${req.userID == u.userID}">
-                                                    ${u.fullname}
-                                                </c:if>
-                                            </c:forEach>
+                                            <c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach>
                                         </td>
                                         <td>${req.title}</td>
                                         <td><fmt:formatDate value="${req.fromDate}" pattern="dd/MM/yyyy" /></td>
-                                        <td><fmt:formatDate value="${req.toDate}" pattern="dd/MM/yyyy" /></td>
                                         <td>${req.reason}</td>
+                                        
                                         <td>
-                                            <button class="btn btn-primary btn-sm approve-btn"
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#approveModal"
-                                                    data-reqid="${req.reqID}"
-                                                    data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>">
-                                                <i class="fa-solid fa-check-to-slot"></i> Xử lý
-                                            </button>
+                                            <c:forEach var="s" items="${statusOptions}">
+                                                <c:if test="${req.statusID == s.statusID}">
+                                                    <c:choose>
+                                                        <c:when test="${s.statusID == 1}"><span class="badge bg-warning text-dark">${s.statusName}</span></c:when>
+                                                        <c:when test="${s.statusID == 2}"><span class="badge bg-success">${s.statusName}</span></c:when>
+                                                        <c:when test="${s.statusID == 3}"><span class="badge bg-danger">${s.statusName}</span></c:when>
+                                                        <c:when test="${s.statusID == 4}"><span class="badge bg-secondary">${s.statusName}</span></c:when>
+                                                        <c:otherwise><span class="badge bg-light text-dark">${s.statusName}</span></c:otherwise>
+                                                    </c:choose>
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        
+                                        <td>
+                                            <c:if test="${empty req.approverID}">-</c:if>
+                                            <c:forEach var="u" items="${allUsers}"><c:if test="${req.approverID == u.userID}">${u.fullname}</c:if></c:forEach>
+                                        </td>
+                                        
+                                        <td>${empty req.approverNote ? '-' : req.approverNote}</td>
+                                        
+                                        <td>
+                                            <c:if test="${req.statusID == 1}">
+                                                <button class="btn btn-primary btn-sm approve-btn"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#approveModal"
+                                                        data-reqid="${req.reqID}"
+                                                        data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>">
+                                                    <i class="fa-solid fa-check-to-slot"></i> Xử lý
+                                                </button>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -130,41 +129,30 @@
                 </div> </div> </div> <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    
                     <form action="userRequestManagement" method="POST">
                         <input type="hidden" name="reqID" id="modal_reqID">
-                        
                         <div class="modal-header bg-primary text-white">
                             <h5 class="modal-title" id="approveModalLabel">Xử lý đơn</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        
                         <div class="modal-body">
                             <p>Bạn đang xử lý đơn của: <strong id="modal_requesterName"></strong></p>
-                            
                             <div class="mb-3">
                                 <label for="statusID" class="form-label">Hành động</label>
                                 <select class="form-select" id="statusID" name="statusID" required>
                                     <option value="" disabled selected>-- Chọn hành động --</option>
-                                    <c:forEach var="s" items="${statusOptions}">
-                                        <option value="${s.statusID}">${s.statusName}</option>
-                                    </c:forEach>
+                                    <c:forEach var="s" items="${statusOptions}"><option value="${s.statusID}">${s.statusName}</option></c:forEach>
                                 </select>
                             </div>
-                            
                             <div class="mb-3">
                                 <label for="approverNote" class="form-label">Ghi chú (Nếu có)</label>
                                 <textarea class="form-control" id="approverNote" name="approverNote" rows="3"></textarea>
                             </div>
                         </div>
-                        
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fa-solid fa-save me-2"></i>Lưu thay đổi
-                            </button>
+                            <button type="submit" class="btn btn-success"><i class="fa-solid fa-save me-2"></i>Lưu thay đổi</button>
                         </div>
-                        
                     </form>
                 </div>
             </div>
@@ -174,25 +162,18 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
-        
         <script>
             $(document).ready(function () {
                 $('#manageRequestTable').DataTable({
                     language: { "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json" },
-                    "order": [[ 0, "asc" ]] 
+                    "order": [[ 0, "desc" ]] // Sắp xếp ID giảm dần
                 });
-
-                // Xử lý khi mở Modal Duyệt
                 $('.approve-btn').on('click', function () {
                     var button = $(this);
                     var reqID = button.data('reqid');
                     var requesterName = button.data('requestername');
-
-                    // Điền dữ liệu vào Modal
                     $('#modal_reqID').val(reqID);
                     $('#modal_requesterName').text(requesterName);
-                    
-                    // Reset form (phòng trường hợp mở lại)
                     $('#statusID').val('');
                     $('#approverNote').val('');
                 });

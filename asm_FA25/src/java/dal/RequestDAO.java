@@ -209,11 +209,11 @@ public class RequestDAO extends DBcontext {
         } else if (userRole == 1) {
             // Role 1 (Manager) -> Thấy đơn của Role 2, 3 (TRONG PHÒNG BAN)
             sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
-                  "WHERE r.statusID = 1 AND u.deptID = ? AND u.roleID IN (2, 3)";
+                  "WHERE u.deptID = ? AND u.roleID IN (2, 3)";
         } else if (userRole == 2) {
             // Role 2 (Leader) -> Thấy đơn của Role 3 (TRONG PHÒNG BAN)
             sql = "SELECT r.* FROM Request r JOIN Users u ON r.userID = u.userID " +
-                  "WHERE r.statusID = 1 AND u.deptID = ? AND u.roleID = 3";
+                  "WHERE u.deptID = ? AND u.roleID = 3";
         }
 
         try {

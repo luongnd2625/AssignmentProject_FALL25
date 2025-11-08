@@ -33,7 +33,7 @@ public class UserRequestManagementServlet extends HttpServlet {
         
         // 1. Lấy danh sách ĐƠN CẦN BẠN DUYỆT (dùng hàm logic tích lũy mới nhất)
         RequestDAO rdao = new RequestDAO();
-        List<Request> pendingRequests = rdao.getApprovableRequests(currentUser);
+        List<Request> allRequests = rdao.getApprovableRequests(currentUser);
         
         // 2. Lấy danh sách TẤT CẢ USER (để tìm tên người gửi đơn)
         UsersDAO udao = new UsersDAO();
@@ -45,7 +45,7 @@ public class UserRequestManagementServlet extends HttpServlet {
         List<Status> statusOptions = sdao.getAll2(); 
 
         // 4. Gửi các danh sách này sang JSP
-        request.setAttribute("pendingRequests", pendingRequests);
+        request.setAttribute("allRequests", allRequests);
         request.setAttribute("allUsers", allUsers);
         request.setAttribute("statusOptions", statusOptions);
 
