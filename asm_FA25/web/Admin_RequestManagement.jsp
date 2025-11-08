@@ -9,30 +9,114 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Admin - Quản lí đơn</title>
-        
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
         <style>
+            .content {
+                width: 100%;
+                padding: 30px;
+            }
+
+            /* CSS MỚI ĐỂ HIỂN THỊ THÔNG TIN USER */
+            .user-info-header {
+                font-weight: 500;
+                color: #495057; /* Màu xám đậm */
+                padding: 10px 15px;
+                background-color: #e9ecef; /* Nền xám nhạt */
+                border-radius: 8px;
+            }
             /* (Toàn bộ CSS sidebar... Giữ nguyên) */
             @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap&subset=vietnamese');
-            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Be Vietnam Pro', sans-serif; }
-            :root{ --sidebar-width: 220px; }
-            body { display: flex; justify-content: flex-start; align-items: flex-start; min-height: 100vh; background-color: #f8f9fa; padding-left: var(--sidebar-width); }
-            header { background: url(Background/Bg.png) no-repeat; background-size: cover; position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh; padding: 28px 16px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 18px; z-index: 99; }
-            .navigation{ width:100%; display:flex; flex-direction:column; gap:6px; margin-top:8px; flex: 1 1 auto; align-items: stretch; }
-            .navigation a{ position: relative; font-size: 1.05em; color: #fff; text-decoration: none; font-weight: 600; padding: 10px 12px; border-radius: 12px; transition: background 0.5s ease, transform 0.25s ease, box-shadow 0.5s ease; }
-            .navigation a:hover{ background: rgba(255,255,255,0.06); box-shadow: 0 8px 20px rgba(0,0,0,0.25); transform: translateX(4px); }
-            .navigation .btnLogin-popup{ width: 100%; height: 46px; background-color: transparent; border: 2px solid #fff; outline: none; border-radius: 8px; cursor: pointer; font-size: 1.05em; color: #fff; font-weight: 600; margin-top: auto; transition: background .18s ease, color .18s ease; }
-            .navigation a::after{ display:none; }
-            .navigation .btnLogin-popup:hover{ background-color:#fff; color:#162928; }
-            .content { width: 100%; padding: 30px; }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Be Vietnam Pro', sans-serif;
+            }
+            :root{
+                --sidebar-width: 220px;
+            }
+            body {
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f8f9fa;
+                padding-left: var(--sidebar-width);
+            }
+            header {
+                background: url(Background/Bg.png) no-repeat;
+                background-size: cover;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: var(--sidebar-width);
+                height: 100vh;
+                padding: 28px 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 18px;
+                z-index: 99;
+            }
+            .navigation{
+                width:100%;
+                display:flex;
+                flex-direction:column;
+                gap:6px;
+                margin-top:8px;
+                flex: 1 1 auto;
+                align-items: stretch;
+            }
+            .navigation a{
+                position: relative;
+                font-size: 1.05em;
+                color: #fff;
+                text-decoration: none;
+                font-weight: 600;
+                padding: 10px 12px;
+                border-radius: 12px;
+                transition: background 0.5s ease, transform 0.25s ease, box-shadow 0.5s ease;
+            }
+            .navigation a:hover{
+                background: rgba(255,255,255,0.06);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+                transform: translateX(4px);
+            }
+            .navigation .btnLogin-popup{
+                width: 100%;
+                height: 46px;
+                background-color: transparent;
+                border: 2px solid #fff;
+                outline: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 1.05em;
+                color: #fff;
+                font-weight: 600;
+                margin-top: auto;
+                transition: background .18s ease, color .18s ease;
+            }
+            .navigation a::after{
+                display:none;
+            }
+            .navigation .btnLogin-popup:hover{
+                background-color:#fff;
+                color:#162928;
+            }
+            .content {
+                width: 100%;
+                padding: 30px;
+            }
         </style>
     </head>
-    
+
     <body>
-        
+
         <header>
             <nav class="navigation">
                 <a href="adminUserManagement"><i class="fa-solid fa-users-cog me-2"></i>Quản lý nhân sự</a>
@@ -44,32 +128,48 @@
                 </a>
             </nav>
         </header>
-        
+
         <div class="content">
             <div class="container-fluid">
-                
+                <c:set var="user" value="${sessionScope.user}" />
+                <c:forEach var="r" items="${rlist}"><c:if test="${r.roleID == user.roleID}"><c:set var="roleName" value="${r.roleName}" /></c:if></c:forEach>
+                <c:forEach var="d" items="${dlist}"><c:if test="${d.deptID == user.deptID}"><c:set var="deptName" value="${d.deptName}" /></c:if></c:forEach>
+
+                        <h5 class="user-info-header mb-4">
+                            <i class="fa-solid fa-user-shield me-2"></i>
+                    <c:choose>
+                        <%-- Nếu là Admin (Role 0) --%>
+                        <c:when test="${user.roleID == 0}">
+                            ${roleName}: ${user.fullname}
+                        </c:when>
+                        <%-- Nếu là Role 1, 2 (User đang ở trang Admin?) --%>
+                        <c:otherwise>
+                            ${roleName} ${deptName} department: ${user.fullname}
+                        </c:otherwise>
+                    </c:choose>
+                </h5>
                 <h2 class="mb-4"><i class="fa-solid fa-file-invoice me-2"></i>Quản lý Đơn (Toàn hệ thống)</h2>
 
                 <c:if test="${not empty sessionScope.admin_message_error}"><div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Thất bại!</strong> ${sessionScope.admin_message_error}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="admin_message_error" scope="session" /></c:if>
                 <c:if test="${not empty sessionScope.admin_message_success}"><div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Thành công!</strong> ${sessionScope.admin_message_success}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="admin_message_success" scope="session" /></c:if>
-                
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <table id="manageRequestTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>ID Đơn</th>
-                                    <th>Người gửi</th>
-                                    <th>Tiêu đề</th>
-                                    <th>Từ ngày</th>
-                                    <th>Đến ngày</th> <th>Lý do</th>
-                                    <th>Trạng thái</th>
-                                    <th>Người duyệt</th>
-                                    <th>Ghi chú</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table id="manageRequestTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID Đơn</th>
+                                        <th>Người gửi</th>
+                                        <th>Tiêu đề</th>
+                                        <th>Từ ngày</th>
+                                        <th>Đến ngày</th> <th>Lý do</th>
+                                        <th>Trạng thái</th>
+                                        <th>Người duyệt</th>
+                                        <th>Ghi chú</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                 <c:forEach var="req" items="${allRequests}">
                                     <tr>
                                         <td>${req.reqID}</td>
@@ -77,7 +177,7 @@
                                         <td>${req.title}</td>
                                         <td><fmt:formatDate value="${req.fromDate}" pattern="dd/MM/yyyy" /></td>
                                         <td><fmt:formatDate value="${req.toDate}" pattern="dd/MM/yyyy" /></td> <td>${req.reason}</td>
-                                        
+
                                         <td>
                                             <c:forEach var="s" items="${statusOptions}">
                                                 <c:if test="${req.statusID == s.statusID}">
@@ -91,14 +191,14 @@
                                                 </c:if>
                                             </c:forEach>
                                         </td>
-                                        
+
                                         <td>
                                             <c:if test="${empty req.approverID}">-</c:if>
                                             <c:forEach var="u" items="${allUsers}"><c:if test="${req.approverID == u.userID}">${u.fullname}</c:if></c:forEach>
-                                        </td>
-                                        
-                                        <td>${empty req.approverNote ? '-' : req.approverNote}</td>
-                                        
+                                                </td>
+
+                                                <td>${empty req.approverNote ? '-' : req.approverNote}</td>
+
                                         <td>
                                             <c:set var="approverRoleID" value="99" />
                                             <c:if test="${not empty req.approverID}">
@@ -169,8 +269,8 @@
         <script>
             $(document).ready(function () {
                 $('#manageRequestTable').DataTable({
-                    language: { "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json" },
-                    "order": [[ 0, "desc" ]]
+                    language: {"url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json"},
+                    "order": [[0, "desc"]]
                 });
                 $('.approve-btn').on('click', function () {
                     var button = $(this);
