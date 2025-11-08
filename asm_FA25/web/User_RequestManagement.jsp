@@ -1,5 +1,5 @@
 <%@ page contentType="text-html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%-- HOÀN NGUYÊN VỀ THƯ VIỆN GỐC (THEO YÊU CẦU CỦA BẠN) --%>
+<%-- SỬ DỤNG THƯ VIỆN GỐC CỦA BẠN (theo lượt 95) --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 
@@ -76,7 +76,7 @@
                                     <th>Người gửi</th>
                                     <th>Tiêu đề</th>
                                     <th>Từ ngày</th>
-                                    <th>Lý do</th>
+                                    <th>Đến ngày</th> <th>Lý do</th>
                                     <th>Trạng thái</th>
                                     <th>Người duyệt</th>
                                     <th>Ghi chú</th>
@@ -87,12 +87,10 @@
                                 <c:forEach var="req" items="${allRequests}">
                                     <tr>
                                         <td>${req.reqID}</td>
-                                        <td>
-                                            <c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach>
-                                        </td>
+                                        <td><c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach></td>
                                         <td>${req.title}</td>
                                         <td><fmt:formatDate value="${req.fromDate}" pattern="dd/MM/yyyy" /></td>
-                                        <td>${req.reason}</td>
+                                        <td><fmt:formatDate value="${req.toDate}" pattern="dd/MM/yyyy" /></td> <td>${req.reason}</td>
                                         
                                         <td>
                                             <c:forEach var="s" items="${statusOptions}">
@@ -116,12 +114,23 @@
                                         <td>${empty req.approverNote ? '-' : req.approverNote}</td>
                                         
                                         <td>
-                                            <c:if test="${req.statusID == 1}">
+                                            <c:set var="approverRoleID" value="99" />
+                                            <c:if test="${not empty req.approverID}">
+                                                <c:forEach var="u" items="${allUsers}"><c:if test="${req.approverID == u.userID}"><c:set var="approverRoleID" value="${u.roleID}" /></c:if></c:forEach>
+                                            </c:if>
+                                            <c:set var="canProcess" value="false" />
+                                            <c:if test="${req.statusID == 1}"><c:set var="canProcess" value="true" /></c:if>
+                                            <c:if test="${req.statusID == 2 || req.statusID == 3}">
+                                                <c:if test="${sessionScope.user.roleID <= approverRoleID}"><c:set var="canProcess" value="true" /></c:if>
+                                            </c:if>
+                                            <c:if test="${canProcess}">
                                                 <button class="btn btn-primary btn-sm approve-btn"
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#approveModal"
                                                         data-reqid="${req.reqID}"
-                                                        data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>">
+                                                        data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>"
+                                                        data-currentstatus="${req.statusID}"
+                                                        data-currentnote="${req.approverNote}">
                                                     <i class="fa-solid fa-check-to-slot"></i> Xử lý
                                                 </button>
                                             </c:if>
@@ -146,7 +155,11 @@
                                 <label for="statusID" class="form-label">Hành động</label>
                                 <select class="form-select" id="statusID" name="statusID" required>
                                     <option value="" disabled selected>-- Chọn hành động --</option>
-                                    <c:forEach var="s" items="${statusOptions}"><option value="${s.statusID}">${s.statusName}</option></c:forEach>
+                                    <c:forEach var="s" items="${statusOptions}">
+                                        <c:if test="${s.statusID == 2 || s.statusID == 3}">
+                                            <option value="${s.statusID}">${s.statusName}</option>
+                                        </c:if>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -177,10 +190,17 @@
                     var button = $(this);
                     var reqID = button.data('reqid');
                     var requesterName = button.data('requestername');
+                    var currentStatus = button.data('currentstatus');
+                    var currentNote = button.data('currentnote');
                     $('#modal_reqID').val(reqID);
                     $('#modal_requesterName').text(requesterName);
-                    $('#statusID').val('');
-                    $('#approverNote').val('');
+                    if (currentStatus == 2 || currentStatus == 3) {
+                        $('#statusID').val(currentStatus);
+                        $('#approverNote').val(currentNote);
+                    } else {
+                        $('#statusID').val('');
+                        $('#approverNote').val('');
+                    }
                 });
             });
         </script>

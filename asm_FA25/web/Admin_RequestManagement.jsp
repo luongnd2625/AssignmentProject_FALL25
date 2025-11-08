@@ -62,7 +62,7 @@
                                     <th>Người gửi</th>
                                     <th>Tiêu đề</th>
                                     <th>Từ ngày</th>
-                                    <th>Lý do</th>
+                                    <th>Đến ngày</th> <th>Lý do</th>
                                     <th>Trạng thái</th>
                                     <th>Người duyệt</th>
                                     <th>Ghi chú</th>
@@ -76,7 +76,7 @@
                                         <td><c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach></td>
                                         <td>${req.title}</td>
                                         <td><fmt:formatDate value="${req.fromDate}" pattern="dd/MM/yyyy" /></td>
-                                        <td>${req.reason}</td>
+                                        <td><fmt:formatDate value="${req.toDate}" pattern="dd/MM/yyyy" /></td> <td>${req.reason}</td>
                                         
                                         <td>
                                             <c:forEach var="s" items="${statusOptions}">
@@ -100,27 +100,15 @@
                                         <td>${empty req.approverNote ? '-' : req.approverNote}</td>
                                         
                                         <td>
-                                            <c:set var="approverRoleID" value="99" /> <%-- Mặc định là 99 (thấp nhất) --%>
+                                            <c:set var="approverRoleID" value="99" />
                                             <c:if test="${not empty req.approverID}">
-                                                <c:forEach var="u" items="${allUsers}">
-                                                    <c:if test="${req.approverID == u.userID}">
-                                                        <c:set var="approverRoleID" value="${u.roleID}" />
-                                                    </c:if>
-                                                </c:forEach>
+                                                <c:forEach var="u" items="${allUsers}"><c:if test="${req.approverID == u.userID}"><c:set var="approverRoleID" value="${u.roleID}" /></c:if></c:forEach>
                                             </c:if>
-
                                             <c:set var="canProcess" value="false" />
-                                            
-                                            <c:if test="${req.statusID == 1}">
-                                                <c:set var="canProcess" value="true" />
-                                            </c:if>
-                                            
+                                            <c:if test="${req.statusID == 1}"><c:set var="canProcess" value="true" /></c:if>
                                             <c:if test="${req.statusID == 2 || req.statusID == 3}">
-                                                <c:if test="${sessionScope.user.roleID <= approverRoleID}">
-                                                    <c:set var="canProcess" value="true" />
-                                                </c:if>
+                                                <c:if test="${sessionScope.user.roleID <= approverRoleID}"><c:set var="canProcess" value="true" /></c:if>
                                             </c:if>
-                                            
                                             <c:if test="${canProcess}">
                                                 <button class="btn btn-primary btn-sm approve-btn"
                                                         data-bs-toggle="modal" 
@@ -133,7 +121,7 @@
                                                 </button>
                                             </c:if>
                                         </td>
-                                        </tr>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
@@ -178,41 +166,28 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
-        
         <script>
             $(document).ready(function () {
                 $('#manageRequestTable').DataTable({
                     language: { "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json" },
-                    "order": [[ 0, "desc" ]] // Sắp xếp ID giảm dần
+                    "order": [[ 0, "desc" ]]
                 });
-
-                // =============================================
-                // BẮT ĐẦU: TỐI ƯU HÓA JAVASCRIPT MODAL
-                // =============================================
                 $('.approve-btn').on('click', function () {
                     var button = $(this);
                     var reqID = button.data('reqid');
                     var requesterName = button.data('requestername');
-                    var currentStatus = button.data('currentstatus'); // Lấy status hiện tại
-                    var currentNote = button.data('currentnote');     // Lấy note hiện tại
-
-                    // Điền dữ liệu vào Modal
+                    var currentStatus = button.data('currentstatus');
+                    var currentNote = button.data('currentnote');
                     $('#modal_reqID').val(reqID);
                     $('#modal_requesterName').text(requesterName);
-                    
-                    // SỬA: Tự động điền thông tin cũ nếu đơn đã được xử lý (2 hoặc 3)
                     if (currentStatus == 2 || currentStatus == 3) {
                         $('#statusID').val(currentStatus);
                         $('#approverNote').val(currentNote);
                     } else {
-                        // Reset nếu là đơn Pending (1)
                         $('#statusID').val('');
                         $('#approverNote').val('');
                     }
                 });
-                // =============================================
-                // KẾT THÚC: TỐI ƯU HÓA JAVASCRIPT MODAL
-                // =============================================
             });
         </script>
     </body>
