@@ -42,7 +42,7 @@ public class UserRequestManagementServlet extends HttpServlet {
         // 3. Lấy danh sách TẤT CẢ STATUS (để dùng cho Modal)
         StatusDAO sdao = new StatusDAO();
         // Dùng hàm getAll2() (bạn đã viết) để loại bỏ "Pending" và "Canceled"
-        List<Status> statusOptions = sdao.getAll2(); 
+        List<Status> statusOptions = sdao.getAll(); 
 
         // 4. Gửi các danh sách này sang JSP
         request.setAttribute("allRequests", allRequests);

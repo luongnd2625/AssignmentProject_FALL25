@@ -1,6 +1,8 @@
 <%@ page contentType="text-html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- HOÀN NGUYÊN VỀ THƯ VIỆN GỐC (THEO YÊU CẦU CỦA BẠN) --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+
 <!doctype html>
 <html lang="vi">
     <head>
@@ -75,7 +77,10 @@
                                     <th>Tiêu đề</th>
                                     <th>Từ ngày</th>
                                     <th>Lý do</th>
-                                    <th>Trạng thái</th> <th>Người duyệt</th> <th>Ghi chú</th> <th>Hành động</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người duyệt</th>
+                                    <th>Ghi chú</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -166,7 +171,7 @@
             $(document).ready(function () {
                 $('#manageRequestTable').DataTable({
                     language: { "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/vi.json" },
-                    "order": [[ 0, "desc" ]] // Sắp xếp ID giảm dần
+                    "order": [[ 0, "desc" ]] 
                 });
                 $('.approve-btn').on('click', function () {
                     var button = $(this);
