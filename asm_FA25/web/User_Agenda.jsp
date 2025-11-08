@@ -169,9 +169,14 @@
 
         <div class="content">
             <div class="container-fluid">
+                <c:set var="user" value="${sessionScope.user}" />
+                <c:forEach var="r" items="${rlist}"><c:if test="${r.roleID == user.roleID}"><c:set var="roleName" value="${r.roleName}" /></c:if></c:forEach>
+                <c:forEach var="d" items="${dlist}"><c:if test="${d.deptID == user.deptID}"><c:set var="deptName" value="${d.deptName}" /></c:if></c:forEach>
 
-                <h2 class="mb-4"><i class="fa-solid fa-calendar-alt me-2"></i>Theo dõi nghỉ phép (Phòng ban)</h2>
-
+                        <h5 class="user-info-header mb-4">
+                            <i class="fa-solid fa-user-shield me-2"></i>
+                    ${roleName} ${deptName} department: ${user.fullname}
+                </h5>
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
                         <form action="userAgenda" method="POST" class="row g-3 align-items-end">

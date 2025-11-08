@@ -1,9 +1,13 @@
 package Controller;
 
+import Model.Department;
 import Model.Request;
+import Model.Role;
 import Model.Status;
 import Model.Users;
+import dal.DepartmentDAO;
 import dal.RequestDAO;
+import dal.RoleDAO;
 import dal.StatusDAO;
 import dal.UsersDAO;
 import jakarta.servlet.ServletException;
@@ -43,12 +47,16 @@ public class UserRequestManagementServlet extends HttpServlet {
         StatusDAO sdao = new StatusDAO();
         // Dùng hàm getAll2() (bạn đã viết) để loại bỏ "Pending" và "Canceled"
         List<Status> statusOptions = sdao.getAll(); 
-
+        DepartmentDAO ddao = new DepartmentDAO();
+        RoleDAO rodao = new RoleDAO();
+        List<Department> dlist = ddao.getAll();
+        List<Role> rlist = rodao.getAll();
         // 4. Gửi các danh sách này sang JSP
         request.setAttribute("allRequests", allRequests);
         request.setAttribute("allUsers", allUsers);
         request.setAttribute("statusOptions", statusOptions);
-
+        request.setAttribute("dlist", dlist);
+        request.setAttribute("rlist", rlist);
         // 5. Chuyển tiếp đến trang JSP
         request.getRequestDispatcher("User_RequestManagement.jsp").forward(request, response);
     }

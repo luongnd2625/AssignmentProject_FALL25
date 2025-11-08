@@ -1,8 +1,12 @@
 package Controller;
 
+import Model.Department;
 import Model.Request;
+import Model.Role;
 import Model.Users;
+import dal.DepartmentDAO;
 import dal.RequestDAO;
+import dal.RoleDAO;
 import dal.UsersDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -58,7 +62,10 @@ public class UserAgendaServlet extends HttpServlet {
         // Lấy ngày bắt đầu của tháng (là thứ mấy)
         LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
         int firstDayOfWeek = firstDayOfMonth.getDayOfWeek().getValue(); // 1=Thứ 2, 7=Chủ Nhật
-
+        DepartmentDAO ddao = new DepartmentDAO();
+        RoleDAO rodao = new RoleDAO();
+        List<Department> dlist = ddao.getAll();
+        List<Role> rlist = rodao.getAll();
         // 5. Gửi tất cả dữ liệu sang JSP
         request.setAttribute("viewableUsers", viewableUsers);
         request.setAttribute("approvedRequests", approvedRequests);
@@ -66,7 +73,9 @@ public class UserAgendaServlet extends HttpServlet {
         request.setAttribute("selectedMonth", month);
         request.setAttribute("daysInMonth", daysInMonth);
         request.setAttribute("firstDayOfWeek", firstDayOfWeek % 7); // Chuyển Chủ Nhật về 0 (để khớp logic JSP)
-
+        request.setAttribute("dlist", dlist);
+        request.setAttribute("rlist", rlist);
+        
         request.getRequestDispatcher("User_Agenda.jsp").forward(request, response);
     }
 
