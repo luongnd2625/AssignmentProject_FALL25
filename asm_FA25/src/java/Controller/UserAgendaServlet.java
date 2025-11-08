@@ -19,10 +19,6 @@ import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Xử lý trang Lịch nghỉ (Agenda)
- * CHO USER (Role 1, 2) - Phạm vi Phòng ban
- */
 public class UserAgendaServlet extends HttpServlet {
 
     @Override

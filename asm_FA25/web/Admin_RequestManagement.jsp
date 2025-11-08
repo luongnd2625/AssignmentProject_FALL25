@@ -15,19 +15,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
         <style>
-            .content {
-                width: 100%;
-                padding: 30px;
-            }
-
-            /* CSS MỚI ĐỂ HIỂN THỊ THÔNG TIN USER */
-            .user-info-header {
-                font-weight: 500;
-                color: #495057; /* Màu xám đậm */
-                padding: 10px 15px;
-                background-color: #e9ecef; /* Nền xám nhạt */
-                border-radius: 8px;
-            }
             /* (Toàn bộ CSS sidebar... Giữ nguyên) */
             @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap&subset=vietnamese');
             * {
@@ -112,6 +99,14 @@
                 width: 100%;
                 padding: 30px;
             }
+            /* Thêm CSS cho user header (từ lượt 100, 103) */
+            .user-info-header {
+                font-weight: 500;
+                color: #495057;
+                padding: 10px 15px;
+                background-color: #e9ecef;
+                border-radius: 8px;
+            }
         </style>
     </head>
 
@@ -131,23 +126,18 @@
 
         <div class="content">
             <div class="container-fluid">
+
                 <c:set var="user" value="${sessionScope.user}" />
                 <c:forEach var="r" items="${rlist}"><c:if test="${r.roleID == user.roleID}"><c:set var="roleName" value="${r.roleName}" /></c:if></c:forEach>
                 <c:forEach var="d" items="${dlist}"><c:if test="${d.deptID == user.deptID}"><c:set var="deptName" value="${d.deptName}" /></c:if></c:forEach>
-
                         <h5 class="user-info-header mb-4">
                             <i class="fa-solid fa-user-shield me-2"></i>
                     <c:choose>
-                        <%-- Nếu là Admin (Role 0) --%>
-                        <c:when test="${user.roleID == 0}">
-                            ${roleName}: ${user.fullname}
-                        </c:when>
-                        <%-- Nếu là Role 1, 2 (User đang ở trang Admin?) --%>
-                        <c:otherwise>
-                            ${roleName} ${deptName} department: ${user.fullname}
-                        </c:otherwise>
+                        <c:when test="${user.roleID == 0}">${roleName}: ${user.fullname}</c:when>
+                        <c:otherwise>${roleName} ${deptName} department: ${user.fullname}</c:otherwise>
                     </c:choose>
                 </h5>
+
                 <h2 class="mb-4"><i class="fa-solid fa-file-invoice me-2"></i>Quản lý Đơn (Toàn hệ thống)</h2>
 
                 <c:if test="${not empty sessionScope.admin_message_error}"><div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Thất bại!</strong> ${sessionScope.admin_message_error}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><c:remove var="admin_message_error" scope="session" /></c:if>
@@ -160,9 +150,10 @@
                                     <tr>
                                         <th>ID Đơn</th>
                                         <th>Người gửi</th>
-                                        <th>Tiêu đề</th>
+                                        <th>Phòng ban</th> <th>Chức vụ</th>   <th>Tiêu đề</th>
                                         <th>Từ ngày</th>
-                                        <th>Đến ngày</th> <th>Lý do</th>
+                                        <th>Đến ngày</th>
+                                        <th>Lý do</th>
                                         <th>Trạng thái</th>
                                         <th>Người duyệt</th>
                                         <th>Ghi chú</th>
@@ -171,16 +162,30 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="req" items="${allRequests}">
+
+                                    <c:set var="sender" value="${null}" />
+                                    <c:forEach var="u" items="${allUsers}">
+                                        <c:if test="${req.userID == u.userID}">
+                                            <c:set var="sender" value="${u}" />
+                                        </c:if>
+                                    </c:forEach>
+
+                                    <c:set var="senderDeptName" value="N/A" />
+                                    <c:set var="senderRoleName" value="N/A" />
+                                    <c:if test="${not empty sender}">
+                                        <c:forEach var="d" items="${dlist}"><c:if test="${sender.deptID == d.deptID}"><c:set var="senderDeptName" value="${d.deptName}" /></c:if></c:forEach>
+                                        <c:forEach var="r" items="${rlist}"><c:if test="${sender.roleID == r.roleID}"><c:set var="senderRoleName" value="${r.roleName}" /></c:if></c:forEach>
+                                    </c:if>
                                     <tr>
                                         <td>${req.reqID}</td>
-                                        <td><c:forEach var="u" items="${allUsers}"><c:if test="${req.userID == u.userID}">${u.fullname}</c:if></c:forEach></td>
-                                        <td>${req.title}</td>
+                                        <td>${not empty sender ? sender.fullname : 'Không rõ'}</td>
+                                        <td>${senderDeptName}</td> <td>${senderRoleName}</td> <td>${req.title}</td>
                                         <td><fmt:formatDate value="${req.fromDate}" pattern="dd/MM/yyyy" /></td>
-                                        <td><fmt:formatDate value="${req.toDate}" pattern="dd/MM/yyyy" /></td> <td>${req.reason}</td>
+                                        <td><fmt:formatDate value="${req.toDate}" pattern="dd/MM/yyyy" /></td>
+                                        <td>${req.reason}</td>
 
                                         <td>
-                                            <c:forEach var="s" items="${statusOptions}">
-                                                <c:if test="${req.statusID == s.statusID}">
+                                            <c:forEach var="s" items="${statusOptions}"><c:if test="${req.statusID == s.statusID}">
                                                     <c:choose>
                                                         <c:when test="${s.statusID == 1}"><span class="badge bg-warning text-dark">${s.statusName}</span></c:when>
                                                         <c:when test="${s.statusID == 2}"><span class="badge bg-success">${s.statusName}</span></c:when>
@@ -188,11 +193,10 @@
                                                         <c:when test="${s.statusID == 4}"><span class="badge bg-secondary">${s.statusName}</span></c:when>
                                                         <c:otherwise><span class="badge bg-light text-dark">${s.statusName}</span></c:otherwise>
                                                     </c:choose>
-                                                </c:if>
-                                            </c:forEach>
-                                        </td>
+                                                </c:if></c:forEach>
+                                            </td>
 
-                                        <td>
+                                            <td>
                                             <c:if test="${empty req.approverID}">-</c:if>
                                             <c:forEach var="u" items="${allUsers}"><c:if test="${req.approverID == u.userID}">${u.fullname}</c:if></c:forEach>
                                                 </td>
@@ -214,7 +218,7 @@
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#approveModal"
                                                         data-reqid="${req.reqID}"
-                                                        data-requestername="<c:forEach var='u' items='${allUsers}'><c:if test='${req.userID == u.userID}'>${u.fullname}</c:if></c:forEach>"
+                                                        data-requestername="${not empty sender ? sender.fullname : 'Không rõ'}"
                                                         data-currentstatus="${req.statusID}"
                                                         data-currentnote="${req.approverNote}">
                                                     <i class="fa-solid fa-check-to-slot"></i> Xử lý
